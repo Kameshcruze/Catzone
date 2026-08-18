@@ -288,10 +288,12 @@ export const CatDetailPage: React.FC = () => {
                 {cat.is_available ? (
                   <button
                     onClick={() => setIsCheckoutOpen(true)}
-                    className="w-full py-4 bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED] hover:to-[#5B21B6] text-white text-sm uppercase tracking-widest font-semibold rounded-2xl shadow-xl hover:shadow-purple-500/25 transition flex items-center justify-center space-x-3 hover:scale-[1.01]"
+                    className="w-full px-6 py-4 bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED] hover:to-[#5B21B6] text-white text-sm font-bold tracking-wide rounded-2xl shadow-xl hover:shadow-purple-500/25 transition-all duration-200 flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   >
-                    <MessageCircle className="w-5 h-5" />
-                    <span>Enquire on WhatsApp / Reserve {cat.name}</span>
+                    <MessageCircle className="w-5 h-5 shrink-0 text-white" />
+                    <span className="text-center leading-snug">
+                      Enquire on WhatsApp &bull; Reserve {cat.name}
+                    </span>
                   </button>
                 ) : (
                   <div className="p-5 bg-stone-100 rounded-2xl border border-stone-300 text-center space-y-2">

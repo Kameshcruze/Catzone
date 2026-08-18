@@ -210,10 +210,10 @@ export const CatCatalog: React.FC = () => {
           <div className="flex items-center space-x-2 overflow-x-auto pt-4 mt-3 border-t border-purple-100/60 pb-1 scrollbar-none">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition ${
+              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
                 selectedCategory === 'all'
-                  ? 'bg-luxury-gradient text-white shadow-md shadow-purple-500/20'
-                  : 'bg-purple-50/60 text-stone-600 hover:text-[#191816] hover:bg-purple-100/50'
+                  ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
+                  : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
               }`}
             >
               All Breeds ({cats.length})
@@ -225,10 +225,10 @@ export const CatCatalog: React.FC = () => {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition ${
+                  className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
                     isSelected
-                      ? 'bg-luxury-gradient text-white shadow-md shadow-purple-500/20'
-                      : 'bg-purple-50/60 text-stone-600 hover:text-[#191816] hover:bg-purple-100/50'
+                      ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
+                      : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
                   }`}
                 >
                   {cat.name} ({count})
@@ -301,8 +301,8 @@ export const CatCatalog: React.FC = () => {
                     onClick={() => setGenderFilter(gender as any)}
                     className={`py-2 px-2 text-xs font-semibold rounded-lg border transition ${
                       genderFilter === gender
-                        ? 'bg-luxury-gradient text-white border-transparent'
-                        : 'bg-[#FAF8FF] text-stone-600 border-purple-100 hover:text-[#191816]'
+                        ? 'bg-[#8B5CF6] text-white border-[#8B5CF6] shadow-xs'
+                        : 'bg-[#FAF8FF] text-stone-700 border-purple-100 hover:text-[#191816]'
                     }`}
                   >
                     {gender === 'all' ? 'All' : gender}
@@ -416,7 +416,7 @@ export const CatCatalog: React.FC = () => {
                 </p>
                 <button
                   onClick={resetAllFilters}
-                  className="inline-flex items-center space-x-2 px-6 py-3 bg-luxury-gradient text-white text-xs uppercase tracking-widest font-semibold rounded-full shadow-lg shadow-purple-500/25 transition"
+                  className="inline-flex items-center space-x-2 px-6 py-3 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white text-xs uppercase tracking-widest font-semibold rounded-full shadow-lg shadow-purple-500/25 transition"
                 >
                   <RotateCcw className="w-4 h-4" />
                   <span>Reset All Filters</span>
@@ -460,8 +460,8 @@ export const CatCatalog: React.FC = () => {
                     onClick={() => setAvailabilityFilter(item.value as any)}
                     className={`py-2 px-2 text-xs font-semibold rounded-xl border transition ${
                       availabilityFilter === item.value
-                        ? 'bg-luxury-gradient text-white border-transparent'
-                        : 'bg-[#FAF8FF] text-stone-600 border-purple-100'
+                        ? 'bg-[#8B5CF6] text-white border-[#8B5CF6] shadow-xs'
+                        : 'bg-[#FAF8FF] text-stone-700 border-purple-100'
                     }`}
                   >
                     {item.label}
@@ -483,8 +483,8 @@ export const CatCatalog: React.FC = () => {
                     onClick={() => setGenderFilter(gender as any)}
                     className={`py-2 px-2 text-xs font-semibold rounded-xl border transition ${
                       genderFilter === gender
-                        ? 'bg-luxury-gradient text-white border-transparent'
-                        : 'bg-[#FAF8FF] text-stone-600 border-purple-100'
+                        ? 'bg-[#8B5CF6] text-white border-[#8B5CF6] shadow-xs'
+                        : 'bg-[#FAF8FF] text-stone-700 border-purple-100'
                     }`}
                   >
                     {gender === 'all' ? 'All' : gender}
@@ -514,14 +514,14 @@ export const CatCatalog: React.FC = () => {
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="flex-1 py-3 bg-purple-50 text-[#191816] rounded-xl text-xs font-semibold uppercase tracking-wider border border-purple-100"
+                className="flex-1 py-3 bg-purple-50 text-[#191816] rounded-xl text-xs font-semibold uppercase tracking-wider border border-purple-100 hover:bg-purple-100 transition"
               >
                 Reset
               </button>
               <button
                 type="button"
                 onClick={() => setMobileFilterOpen(false)}
-                className="flex-1 py-3 bg-luxury-gradient text-white rounded-xl text-xs font-semibold uppercase tracking-wider shadow-md"
+                className="flex-1 py-3 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-xl text-xs font-semibold uppercase tracking-wider shadow-md shadow-purple-500/20 transition"
               >
                 Show Results
               </button>

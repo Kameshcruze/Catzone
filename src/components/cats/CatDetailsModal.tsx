@@ -287,18 +287,20 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
                 {cat.is_available ? (
                   <button
                     onClick={() => setIsCheckoutOpen(true)}
-                    className="w-full py-4 bg-luxury-gradient text-white text-xs sm:text-sm uppercase tracking-widest font-semibold rounded-full shadow-lg shadow-purple-500/25 transition flex items-center justify-center space-x-2.5 hover:shadow-xl hover:-translate-y-0.5"
+                    className="w-full px-5 py-3.5 sm:py-4 bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED] hover:to-[#5B21B6] text-white text-xs sm:text-sm font-bold tracking-wide rounded-full shadow-lg shadow-purple-500/25 transition-all duration-200 flex items-center justify-center gap-2.5 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   >
-                    <MessageCircle className="w-5 h-5" />
-                    <span>Enquire on WhatsApp / Reserve {cat.name}</span>
+                    <MessageCircle className="w-5 h-5 shrink-0 text-white" />
+                    <span className="text-center leading-snug">
+                      Enquire on WhatsApp &bull; Reserve {cat.name}
+                    </span>
                   </button>
                 ) : (
                   <div className="space-y-2">
                     <button
                       disabled
-                      className="w-full py-4 bg-stone-200 text-stone-500 text-xs sm:text-sm uppercase tracking-widest font-semibold rounded-full cursor-not-allowed flex items-center justify-center space-x-2"
+                      className="w-full px-5 py-3.5 sm:py-4 bg-stone-200 text-stone-500 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-full cursor-not-allowed flex items-center justify-center gap-2"
                     >
-                      <span>SOLD OUT — Found a Home</span>
+                      <span>SOLD OUT &mdash; Found a Home</span>
                     </button>
                     <p className="text-center text-xs text-stone-600">
                       This companion has already found a loving family.{' '}

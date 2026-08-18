@@ -34,7 +34,7 @@
 
 /* Premium Gradients powered by #8B5CF6 */
 .bg-luxury-gradient {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(245, 243, 255, 0.6) 40%, rgba(255, 255, 255, 0.95) 100%);
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #6D28D9 100%);
 }
 
 .bg-luxury-surface {

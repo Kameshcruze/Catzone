@@ -212,31 +212,31 @@ export const HeroSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats Row (Exact 3-column Modulive style) */}
-        <div className="mt-14 pt-8 border-t border-stone-200/80 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center sm:text-left">
-          <div>
+        {/* Stats Row */}
+        <div className="mt-14 pt-8 border-t border-stone-200/80 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+          <div className="flex flex-col items-center text-center">
             <span className="font-display text-4xl sm:text-5xl font-extrabold text-[#111111] block tracking-tight">
-              18K+
+              500+
             </span>
-            <p className="text-xs text-stone-500 mt-1 max-w-[220px]">
+            <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
               Happy and loyal adopters who welcomed our kittens
             </p>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center text-center">
             <span className="font-display text-4xl sm:text-5xl font-extrabold text-[#111111] block tracking-tight">
-              700+
+              70+
             </span>
-            <p className="text-xs text-stone-500 mt-1 max-w-[220px]">
+            <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
               Pedigree bloodlines and champions registered
             </p>
           </div>
 
-          <div>
+          <div className="flex flex-col items-center text-center">
             <span className="font-display text-4xl sm:text-5xl font-extrabold text-[#111111] block tracking-tight">
               95%
             </span>
-            <p className="text-xs text-stone-500 mt-1 max-w-[220px]">
+            <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
               Health clearance and 5-star concierge satisfaction
             </p>
           </div>
