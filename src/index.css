@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #FAFAFC;
+    --bg-card: #FFFFFF;
+    --bg-card-subtle: #F5F3FF;
+    --text-primary: #111111;
+    --text-secondary: #6B7280;
+    --accent: #111111;
+    --accent-purple: #8B5CF6;
+    --accent-purple-dark: #7C3AED;
+    --border-subtle: #EDE9FE;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display, .font-serif, .font-serif-display {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Premium Gradients powered by #8B5CF6 */
+.bg-luxury-gradient {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(245, 243, 255, 0.6) 40%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.bg-luxury-surface {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF8FF 100%);
+}
+
+.bg-luxury-hero {
+  background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.12) 0%, rgba(245, 243, 255, 0.4) 35%, #FFFFFF 70%);
+}
+
+.bg-luxury-purple {
+  background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #6D28D9 100%);
+}
+
+.bg-luxury-dark {
+  background: linear-gradient(145deg, #130D24 0%, #0E071A 50%, #080410 100%);
+}
+
+.bg-luxury-card {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F9F7FE 100%);
+}
+
+.border-luxury-purple {
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.glow-purple {
+  box-shadow: 0 8px 30px -4px rgba(139, 92, 246, 0.25);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAFAFC;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DDD6FE;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #8B5CF6;
+}
+
+/* Hide scrollbar for tabs */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+

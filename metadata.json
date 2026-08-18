@@ -1,0 +1,6 @@
+{
+  "name": "CatZone.in",
+  "description": "Premium luxury cat marketplace and curated cattery featuring healthy pedigree feline companions, breed discovery, verified health records, and WhatsApp concierge checkout.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
