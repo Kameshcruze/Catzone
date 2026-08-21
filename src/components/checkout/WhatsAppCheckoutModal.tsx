@@ -61,7 +61,7 @@ export const WhatsAppCheckoutModal: React.FC<WhatsAppCheckoutModalProps> = ({
         phone: formData.phone.trim(),
         email: formData.email.trim(),
         city: formData.city?.trim() || 'India',
-        message: formData.message?.trim() || 'Interested in adopting this cat.',
+        message: formData.message?.trim() || 'Interested in purchasing this cat.',
         status: 'New',
       });
 

@@ -129,7 +129,7 @@ export const ContactPage: React.FC = () => {
                   Message Received
                 </h3>
                 <p className="text-xs sm:text-sm text-stone-600 max-w-md mx-auto">
-                  Thank you for reaching out to CatZone. One of our feline adoption coordinators will connect with you shortly on WhatsApp / phone.
+                  Thank you for reaching out to CatZone. One of our feline sales coordinators will connect with you shortly on WhatsApp / phone.
                 </p>
                 <button
                   onClick={() => {

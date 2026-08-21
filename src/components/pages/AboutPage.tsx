@@ -18,7 +18,7 @@ export const AboutPage: React.FC = () => {
             The Cattery of Refined Standards
           </h1>
           <p className="text-sm sm:text-base text-stone-600 leading-relaxed">
-            Established to bring world-class feline breeding, ethical stewardship, and bespoke concierge adoption to India.
+            Established to bring world-class feline breeding, ethical stewardship, and bespoke concierge purchasing to India.
           </p>
         </div>
 

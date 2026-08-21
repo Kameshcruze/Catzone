@@ -5,9 +5,7 @@ import {
   Settings,
   MessageCircle,
   Save,
-  RotateCcw,
   Check,
-  AlertTriangle,
   Building,
   Phone,
   Mail,
@@ -16,10 +14,9 @@ import {
 } from 'lucide-react';
 
 export const AdminSettings: React.FC = () => {
-  const { settings, updateSettings, resetToDefaults } = useStore();
+  const { settings, updateSettings } = useStore();
   const [formData, setFormData] = useState(settings);
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,19 +27,6 @@ export const AdminSettings: React.FC = () => {
     } catch (err) {
       console.error(err);
       alert('Failed to save settings.');
-    }
-  };
-
-  const handleResetConfirm = async () => {
-    try {
-      await resetToDefaults();
-      setShowResetConfirm(false);
-      setFormData(settings);
-      setSavedSuccess(true);
-      setTimeout(() => setSavedSuccess(false), 3000);
-    } catch (err) {
-      console.error(err);
-      alert('Failed to reset settings.');
     }
   };
 
@@ -84,7 +68,7 @@ export const AdminSettings: React.FC = () => {
                 className="w-full px-4 py-2.5 bg-[#FAF8FF] border border-purple-100 rounded-xl text-sm font-mono focus:outline-none focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
               />
               <p className="text-[11px] text-stone-500 mt-1.5 leading-relaxed">
-                All &ldquo;Enquire on WhatsApp&rdquo; and concierge checkout buttons across the public website will route adoption leads to this WhatsApp number without modifying code. (Example format: <code>919585262522</code>)
+                All &ldquo;Enquire on WhatsApp&rdquo; and concierge checkout buttons across the public website will route purchase leads to this WhatsApp number without modifying code. (Example format: <code>919585262522</code>)
               </p>
             </div>
 
@@ -212,63 +196,7 @@ export const AdminSettings: React.FC = () => {
           </div>
         </form>
 
-        {/* Danger Zone / Reset Demo Data */}
-        <div className="bg-rose-50/50 p-6 sm:p-8 rounded-3xl border border-rose-200 shadow-sm space-y-4">
-          <div className="flex items-center space-x-2 text-rose-800">
-            <AlertTriangle className="w-5 h-5" />
-            <h3 className="text-base font-serif font-bold">
-              Database Reset & Seed Recovery
-            </h3>
-          </div>
-          <p className="text-xs text-rose-700 leading-relaxed">
-            Need to reset your demo environment? This will restore all 10 pedigree breed categories and sample felines back to initial factory state.
-          </p>
-          <button
-            type="button"
-            onClick={() => setShowResetConfirm(true)}
-            className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-semibold uppercase tracking-wider transition flex items-center space-x-2 shadow-sm"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Reset to Initial Sample Data</span>
-          </button>
-        </div>
-
       </div>
-
-      {/* Confirmation Modal */}
-      {showResetConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-3xl border border-purple-100 max-w-md w-full p-6 space-y-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <div className="flex items-center space-x-3 text-rose-600">
-              <AlertTriangle className="w-6 h-6 shrink-0" />
-              <h3 className="text-lg font-serif font-bold text-[#191816]">
-                Confirm Reset to Default Data?
-              </h3>
-            </div>
-
-            <p className="text-xs text-stone-600 leading-relaxed">
-              This will overwrite any newly created cats, custom categories, or enquiries with the pristine 40-cat pedigree seed collection.
-            </p>
-
-            <div className="flex items-center space-x-3 justify-end pt-2">
-              <button
-                type="button"
-                onClick={() => setShowResetConfirm(false)}
-                className="px-5 py-2.5 bg-purple-50 text-[#191816] rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-purple-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleResetConfirm}
-                className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-full text-xs font-semibold uppercase tracking-wider shadow-sm"
-              >
-                Yes, Reset All
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </AdminLayout>
   );
 };

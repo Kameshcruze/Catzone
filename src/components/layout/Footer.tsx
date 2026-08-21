@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
                   onClick={() => navigate('faq')}
                   className="hover:text-white transition"
                 >
-                  Adoption FAQ
+                  Purchase FAQ
                 </button>
               </li>
             </ul>
@@ -154,7 +154,7 @@ export const Footer: React.FC = () => {
               onClick={() => navigate('terms')}
               className="hover:text-stone-300 transition"
             >
-              Terms of Adoption
+              Terms of Sale
             </button>
             <span>·</span>
             <button

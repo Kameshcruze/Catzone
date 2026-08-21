@@ -47,7 +47,7 @@ export const AdminDashboard: React.FC = () => {
   return (
     <AdminLayout
       title="Good morning, Admin."
-      subtitle="Here is an overview of your cattery inventory, availability statuses, and WhatsApp adoption requests."
+      subtitle="Here is an overview of your cattery inventory, availability statuses, and WhatsApp purchase requests."
       actionButton={
         <button
           onClick={() => navigate('admin-cat-new')}
@@ -59,7 +59,7 @@ export const AdminDashboard: React.FC = () => {
       }
     >
       <div className="space-y-8 max-w-7xl">
-        
+
         {/* Top 4 Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Stat 1 */}
@@ -93,7 +93,7 @@ export const AdminDashboard: React.FC = () => {
           {/* Stat 3 */}
           <div className="bg-white p-6 rounded-3xl border border-purple-100 shadow-sm space-y-2">
             <div className="flex items-center justify-between text-stone-500">
-              <span className="text-xs uppercase tracking-wider font-semibold">Sold Out / Adopted</span>
+              <span className="text-xs uppercase tracking-wider font-semibold">Sold Out</span>
               <XCircle className="w-4 h-4 text-[#8B5CF6]" />
             </div>
             <div className="text-3xl font-display font-bold text-[#8B5CF6]">

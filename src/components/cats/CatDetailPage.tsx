@@ -141,7 +141,7 @@ export const CatDetailPage: React.FC = () => {
                         ? 'bg-emerald-950/85 text-emerald-100 border border-emerald-500/30'
                         : 'bg-stone-800/90 text-stone-300 border border-stone-600/30'
                     }`}>
-                      {cat.is_available ? '● Available for Adoption' : '● Sold Out'}
+                      {cat.is_available ? '● Available for Sale' : '● Sold Out'}
                     </span>
                   </div>
                 </div>

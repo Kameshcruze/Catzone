@@ -56,8 +56,8 @@ export const AdminCatForm: React.FC = () => {
     personality: 'Affectionate, Calm, Playful, Cuddly',
     description: 'An exceptional pedigree kitten with champion lineage, dense plush double coat, and radiant personality.',
     location: 'Bengaluru Sanctuary Nursery',
-    main_image: SAMPLE_CAT_PHOTOS[0].url,
-    gallery_images: [SAMPLE_CAT_PHOTOS[0].url, SAMPLE_CAT_PHOTOS[1].url],
+    main_image: '',
+    gallery_images: [],
     is_available: true,
     is_featured: false,
   });
@@ -120,10 +120,10 @@ export const AdminCatForm: React.FC = () => {
       return;
     }
 
-    const cleanedMain = normalizeImageUrl(formData.main_image || SAMPLE_CAT_PHOTOS[0].url);
-    const cleanedGallery = (formData.gallery_images || [cleanedMain]).map((img) =>
-      normalizeImageUrl(img)
-    );
+    const cleanedMain = formData.main_image ? normalizeImageUrl(formData.main_image) : '';
+    const cleanedGallery = (formData.gallery_images || [])
+      .filter(Boolean)
+      .map((img) => normalizeImageUrl(img));
 
     try {
       if (isEditing && editCatId) {
@@ -150,7 +150,7 @@ export const AdminCatForm: React.FC = () => {
           description: formData.description || 'Verified purebred cattery pedigree companion.',
           location: formData.location || 'Bengaluru Cattery Suite',
           main_image: cleanedMain,
-          gallery_images: cleanedGallery.length ? cleanedGallery : [cleanedMain],
+          gallery_images: cleanedGallery,
           is_available: formData.is_available !== undefined ? formData.is_available : true,
           is_featured: !!formData.is_featured,
         });
@@ -307,7 +307,7 @@ export const AdminCatForm: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#191816] mb-1">
-                Adoption Fee / Price (INR ₹) *
+                Purchase Price (INR ₹) *
               </label>
               <input
                 type="number"
@@ -449,7 +449,7 @@ export const AdminCatForm: React.FC = () => {
             </div>
 
             {/* Live Cover Photo Preview */}
-            {formData.main_image && (
+            {formData.main_image ? (
               <div className="flex items-center space-x-4 p-3.5 bg-[#FAF8FF] rounded-2xl border border-purple-100">
                 <div className="w-20 h-20 rounded-xl overflow-hidden bg-stone-100 border border-purple-100 shrink-0 relative">
                   <img
@@ -475,41 +475,21 @@ export const AdminCatForm: React.FC = () => {
                   </p>
                 </div>
               </div>
+            ) : (
+              <div className="flex items-center space-x-4 p-3.5 bg-[#FAF8FF] rounded-2xl border border-purple-100 border-dashed">
+                 <div className="w-20 h-20 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center shrink-0">
+                    <ImageIcon className="w-6 h-6 text-purple-200" />
+                 </div>
+                 <div className="flex-1 min-w-0">
+                    <p className="text-xs text-stone-500 font-medium">No cover image selected</p>
+                    <p className="text-[10px] text-stone-400 mt-0.5">Upload or paste a URL above</p>
+                 </div>
+              </div>
             )}
           </div>
 
           {/* Preset Photo Selector */}
-          <div>
-            <span className="text-xs font-semibold text-stone-500 block mb-2">
-              Or pick from luxury feline image presets:
-            </span>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
-              {SAMPLE_CAT_PHOTOS.map((photo, i) => (
-                <button
-                  type="button"
-                  key={i}
-                  onClick={() => setFormData({ ...formData, main_image: photo.url })}
-                  className={`group relative rounded-xl overflow-hidden aspect-square border-2 transition ${
-                    formData.main_image === photo.url
-                      ? 'border-[#8B5CF6] ring-2 ring-[#8B5CF6]/40'
-                      : 'border-purple-100 hover:border-[#8B5CF6]'
-                  }`}
-                >
-                  <img
-                    src={photo.url}
-                    alt={photo.label}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center p-1">
-                    <span className="text-[9px] text-white font-semibold text-center leading-tight">
-                      {photo.label}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+
 
           {/* Gallery Images List */}
           <div>
@@ -639,7 +619,7 @@ export const AdminCatForm: React.FC = () => {
               />
               <div>
                 <span className="text-xs font-bold text-[#191816] block">
-                  {formData.is_available ? 'Available for Adoption (ON)' : 'Marked as Sold Out (OFF)'}
+                  {formData.is_available ? 'Available for Sale (ON)' : 'Marked as Sold Out (OFF)'}
                 </span>
                 <span className="text-[11px] text-stone-500">
                   When disabled, website displays &ldquo;SOLD OUT&rdquo; badge.

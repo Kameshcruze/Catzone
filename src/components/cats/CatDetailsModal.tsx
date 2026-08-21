@@ -193,7 +193,7 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
                   </h2>
                   <div>
                     <span className="text-[11px] uppercase tracking-widest text-stone-500 block font-semibold">
-                      Adoption Fee
+                      Purchase Price
                     </span>
                     <span className="text-2xl sm:text-3xl font-display font-bold text-[#8B5CF6]">
                       ₹{cat.price.toLocaleString('en-IN')}

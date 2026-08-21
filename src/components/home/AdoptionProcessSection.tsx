@@ -41,7 +41,7 @@ export const AdoptionProcessSection: React.FC = () => {
             CONCIERGE JOURNEY
           </p>
           <h2 className="text-3xl sm:text-5xl font-display font-bold text-[#111111] tracking-tight">
-            How CatZone Adoption Works
+            How CatZone Purchasing Works
           </h2>
           <p className="text-sm text-stone-500 mt-3">
             A transparent, stress-free path from discovery to welcoming your companion home.

@@ -1,9 +1,17 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
 import { ArrowUpRight, Star } from 'lucide-react';
+import { normalizeImageUrl, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtils';
 
 export const HeroSection: React.FC = () => {
   const { navigate, cats } = useStore();
+
+  let featuredCats = cats.filter(c => c.is_featured && c.is_available);
+  if (featuredCats.length < 2) {
+    const fallbackCats = cats.filter(c => c.is_available && !c.is_featured);
+    featuredCats = [...featuredCats, ...fallbackCats];
+  }
+  const displayCats = featuredCats.slice(0, 2);
 
   const availableCount = cats.filter((c) => c.is_available).length;
 
@@ -48,17 +56,17 @@ export const HeroSection: React.FC = () => {
               <img
                 className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                alt="Adopter"
+                alt="Buyer"
               />
               <img
                 className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                alt="Adopter"
+                alt="Buyer"
               />
               <img
                 className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
-                alt="Adopter"
+                alt="Buyer"
               />
               <div className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-[9px] font-bold text-white ring-2 ring-white">
                 +1.2k
@@ -73,7 +81,7 @@ export const HeroSection: React.FC = () => {
                     <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <span className="text-stone-500 font-medium whitespace-nowrap">(4.9/5 from 1,200+ adopters)</span>
+                <span className="text-stone-500 font-medium whitespace-nowrap">(4.9/5 from 1,200+ buyers)</span>
               </div>
             </div>
           </div>
@@ -101,7 +109,7 @@ export const HeroSection: React.FC = () => {
               </span>
             </div>
 
-            {/* Bottom Content & 'Adopt Now ↗' Button */}
+            {/* Bottom Content & 'Purchase Now ↗' Button */}
             <div className="relative p-5 sm:p-8 z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div className="text-white max-w-lg">
                 <p className="text-xs uppercase tracking-wider text-purple-300 font-semibold mb-1">Pedigree Showcase</p>
@@ -114,7 +122,7 @@ export const HeroSection: React.FC = () => {
                 onClick={() => navigate('cats')}
                 className="inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#8B5CF6] via-[#7C3AED] to-[#6D28D9] hover:from-[#7C3AED] hover:to-[#5B21B6] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all duration-200 shadow-xl shadow-purple-900/40 hover:scale-105 active:scale-95 shrink-0"
               >
-                <span>Adopt Now</span>
+                <span>Purchase Now</span>
                 <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </span>
@@ -124,91 +132,52 @@ export const HeroSection: React.FC = () => {
 
           {/* Stacked Product Cards (4 cols) */}
           <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
-            
-            {/* Stacked Card 1: Muffin Gold */}
-            <div
-              onClick={() => navigate('cat-detail', { catId: 'cat-001' })}
-              className="bg-gradient-to-b from-white to-[#F7F5FF] rounded-[24px] p-4 border border-purple-100/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-all duration-200 cursor-pointer group"
-            >
-              <div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white mb-3">
-                <img
-                  src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=600&q=80"
-                  alt="Muffin Gold"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* Trait Color Dots */}
-                <div className="absolute top-2.5 left-2.5 flex items-center space-x-1 bg-white/90 backdrop-blur-xs px-2 py-1 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-amber-400" />
-                  <span className="w-2 h-2 rounded-full bg-stone-300" />
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <h4 className="font-display font-bold text-sm text-[#111111] group-hover:text-[#7C3AED] transition-colors">
-                    Muffin Gold
-                  </h4>
-                  <span className="font-display font-bold text-sm text-[#111111]">
-                    ₹65,000
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mt-1">
-                  <div className="flex items-center space-x-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    ))}
+            {displayCats.map((cat, idx) => (
+              <div
+                key={cat.id || idx}
+                onClick={() => navigate('cat-detail', { catId: cat.id })}
+                className="bg-gradient-to-b from-white to-[#F7F5FF] rounded-[24px] p-4 border border-purple-100/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-all duration-200 cursor-pointer group"
+              >
+                <div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white mb-3">
+                  <img
+                    src={normalizeImageUrl(cat.main_image)}
+                    alt={cat.name}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
+                    }}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {/* Trait Color Dots (Decorative) */}
+                  <div className="absolute top-2.5 left-2.5 flex items-center space-x-1 bg-white/90 backdrop-blur-xs px-2 py-1 rounded-full">
+                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                    <span className="w-2 h-2 rounded-full bg-stone-300" />
+                    <span className="w-2 h-2 rounded-full bg-purple-400" />
                   </div>
-                  <span className="text-[10px] text-stone-500 uppercase tracking-wider font-medium">
-                    British Shorthair
-                  </span>
                 </div>
-              </div>
-            </div>
 
-            {/* Stacked Card 2: Elite Pearl */}
-            <div
-              onClick={() => navigate('cat-detail', { catId: 'cat-003' })}
-              className="bg-gradient-to-b from-white to-[#F7F5FF] rounded-[24px] p-4 border border-purple-100/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-all duration-200 cursor-pointer group"
-            >
-              <div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-white mb-3">
-                <img
-                  src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80"
-                  alt="Elite Pearl"
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                {/* Trait Color Dots */}
-                <div className="absolute top-2.5 left-2.5 flex items-center space-x-1 bg-white/90 backdrop-blur-xs px-2 py-1 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
-                  <span className="w-2 h-2 rounded-full bg-stone-400" />
-                  <span className="w-2 h-2 rounded-full bg-amber-200" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <h4 className="font-display font-bold text-sm text-[#111111] group-hover:text-[#7C3AED] transition-colors">
-                    Elite Pearl
-                  </h4>
-                  <span className="font-display font-bold text-sm text-[#111111]">
-                    ₹75,000
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mt-1">
-                  <div className="flex items-center space-x-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                    ))}
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-display font-bold text-sm text-[#111111] group-hover:text-[#7C3AED] transition-colors truncate pr-2">
+                      {cat.name}
+                    </h4>
+                    <span className="font-display font-bold text-sm text-[#111111] whitespace-nowrap">
+                      ₹{cat.price.toLocaleString('en-IN')}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-stone-500 uppercase tracking-wider font-medium">
-                    Ragdoll Royal
-                  </span>
+                  <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-center space-x-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400 shrink-0" />
+                      ))}
+                    </div>
+                    <span className="text-[10px] text-stone-500 uppercase tracking-wider font-medium truncate ml-2">
+                      {cat.breed}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-
+            ))}
           </div>
         </div>
 
@@ -219,7 +188,7 @@ export const HeroSection: React.FC = () => {
               500+
             </span>
             <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
-              Happy and loyal adopters who welcomed our kittens
+              Happy and loyal buyers who welcomed our kittens
             </p>
           </div>
 

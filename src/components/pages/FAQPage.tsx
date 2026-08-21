@@ -16,7 +16,7 @@ export const FAQPage: React.FC = () => {
   const faqs: FAQItem[] = [
     {
       category: 'adoption',
-      question: 'How does the adoption & WhatsApp checkout process work?',
+      question: 'How does the purchase & WhatsApp checkout process work?',
       answer: 'Browse our available cats and click "Enquire on WhatsApp". You will enter your contact details, and the platform generates a pre-formatted message with the exact cat ID, breed, and price to our concierge WhatsApp number (+91 95852 62522). We immediately confirm availability, arrange an HD live video call, and guide you through the reservation steps.',
     },
     {
@@ -67,7 +67,7 @@ export const FAQPage: React.FC = () => {
             Everything You Need to Know
           </h1>
           <p className="text-sm text-stone-600 max-w-xl mx-auto">
-            Clear answers about adoption protocols, veterinary screening, transit safety, and life with your new pedigree companion.
+            Clear answers about purchase protocols, veterinary screening, transit safety, and life with your new pedigree companion.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export const FAQPage: React.FC = () => {
         <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-2">
           {[
             { id: 'all', label: 'All Questions' },
-            { id: 'adoption', label: 'Adoption & WhatsApp' },
+            { id: 'adoption', label: 'Purchase & WhatsApp' },
             { id: 'health', label: 'Health & Guarantees' },
             { id: 'transit', label: 'India-Wide Transit' },
             { id: 'care', label: 'Starter Kit & Care' },

@@ -39,7 +39,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             2. Purpose of Processing
           </h3>
           <p>
-            Your details are used exclusively to process your companion adoption request, verify veterinary paperwork, coordinate temperature-controlled transit, and provide ongoing feline nutritional guidance.
+            Your details are used exclusively to process your companion purchase request, verify veterinary paperwork, coordinate temperature-controlled transit, and provide ongoing feline nutritional guidance.
           </p>
 
           <h3 className="text-base font-display font-bold text-[#191816]">
@@ -53,7 +53,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             4. Microchip Registration & Ownership Records
           </h3>
           <p>
-            Upon adoption finalization, the adopter&apos;s verified name and contact details are registered with the international microchip database as the legal feline guardian.
+            Upon purchase finalization, the adopter&apos;s verified name and contact details are registered with the international microchip database as the legal feline guardian.
           </p>
         </div>
       </div>
@@ -79,19 +79,19 @@ export const TermsPage: React.FC = () => {
           <div className="flex items-center space-x-3 text-[#8B5CF6] pb-4 border-b border-purple-100">
             <FileText className="w-6 h-6" />
             <h1 className="text-3xl font-display font-bold text-[#191816]">
-              Terms of Adoption & Guarantee
+              Terms of Sale & Guarantee
             </h1>
           </div>
 
           <p>
-            Welcome to CatZone.in. By initiating a purchase enquiry or completing an adoption reservation through our WhatsApp concierge, you acknowledge agreement with our terms below.
+            Welcome to CatZone.in. By initiating a purchase enquiry or completing an purchase reservation through our WhatsApp concierge, you acknowledge agreement with our terms below.
           </p>
 
           <h3 className="text-base font-display font-bold text-[#191816]">
             1. Pedigree Authenticity & Lineage
           </h3>
           <p>
-            All pedigree kittens cataloged on CatZone are bred under recognized WCF or TICA ethical protocols. Lineage documentation and certified pedigree papers are handed over upon full adoption clearance.
+            All pedigree kittens cataloged on CatZone are bred under recognized WCF or TICA ethical protocols. Lineage documentation and certified pedigree papers are handed over upon full purchase clearance.
           </p>
 
           <h3 className="text-base font-display font-bold text-[#191816]">
@@ -112,7 +112,7 @@ export const TermsPage: React.FC = () => {
             4. Ethical Home Commitment
           </h3>
           <p>
-            CatZone retains the right to politely decline an adoption if the adopter cannot provide an indoor-safe, nurturing, and responsible living environment.
+            CatZone retains the right to politely decline a sale if the adopter cannot provide an indoor-safe, nurturing, and responsible living environment.
           </p>
         </div>
       </div>

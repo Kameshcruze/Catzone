@@ -107,7 +107,7 @@ export const AdminCatsList: React.FC = () => {
             >
               <option value="all">All Statuses</option>
               <option value="available">Available in Cattery</option>
-              <option value="sold">Sold Out / Adopted</option>
+              <option value="sold">Sold Out</option>
             </select>
           </div>
         </div>

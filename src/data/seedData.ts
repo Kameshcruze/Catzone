@@ -28,7 +28,7 @@ City: {city}
 
 Message: {message}
 
-Please confirm availability and share the adoption / concierge delivery process.`,
+Please confirm availability and share the purchase / concierge delivery process.`,
   hero_title: 'Find a companion worth coming home to.',
   hero_subtitle: 'Discover carefully selected, pedigree feline companions with verified health lineage, ethical rearing, and bespoke concierge delivery across India.',
   announcement_bar: 'Certified Pedigree Kittens · Complete Vaccination & DNA Health Guarantee · White-Glove Doorstep Delivery Across India',
@@ -1233,7 +1233,7 @@ export const DEFAULT_ENQUIRIES: Enquiry[] = [
     phone: '+91 98200 44556',
     email: 'arjun.mehta@gmail.com',
     city: 'Mumbai',
-    message: 'Hello, looking to adopt Luna. Can you arrange air concierge delivery to Mumbai next week?',
+    message: 'Hello, looking to purchase Luna. Can you arrange air concierge delivery to Mumbai next week?',
     status: 'New',
     created_at: '2026-08-16T14:30:00Z',
   },

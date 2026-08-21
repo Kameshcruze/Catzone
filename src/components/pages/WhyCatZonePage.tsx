@@ -55,7 +55,7 @@ export const WhyCatZonePage: React.FC = () => {
         <div className="text-center mb-16 space-y-4">
           <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 text-[#7C3AED] text-xs font-semibold uppercase tracking-wider mb-2">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>OUR ADOPTION PROMISE</span>
+            <span>OUR SALES PROMISE</span>
           </div>
           <h1 className="text-4xl sm:text-6xl font-display font-bold text-[#191816] tracking-tight">
             Why Discerning Families Choose CatZone

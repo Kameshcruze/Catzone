@@ -35,7 +35,7 @@ export const AdminEnquiries: React.FC = () => {
 
   return (
     <AdminLayout
-      title="WhatsApp Adoption Inquiries"
+      title="WhatsApp Purchase Inquiries"
       subtitle="Track customer leads generated from the public concierge WhatsApp checkout flow."
     >
       <div className="space-y-6 max-w-7xl">
@@ -111,7 +111,7 @@ export const AdminEnquiries: React.FC = () => {
                     >
                       <option value="New">New Lead</option>
                       <option value="Contacted">Contacted Adopter</option>
-                      <option value="Completed">Adoption Completed</option>
+                      <option value="Completed">Purchase Completed</option>
                       <option value="Cancelled">Cancelled</option>
                     </select>
 

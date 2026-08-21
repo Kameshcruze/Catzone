@@ -269,7 +269,7 @@ export const CatCatalog: React.FC = () => {
                 {[
                   { value: 'all', label: 'All Companions' },
                   { value: 'available', label: 'Available Only (In Cattery)' },
-                  { value: 'sold', label: 'Sold Out / Adopted' },
+                  { value: 'sold', label: 'Sold Out' },
                 ].map((item) => (
                   <label
                     key={item.value}
