@@ -141,37 +141,42 @@ export const Footer: React.FC = () => {
         {/* Bottom Minimal Bar */}
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-stone-400 space-y-4 md:space-y-0">
           <p>© 2026 CatZone.in · Karur, India. All rights reserved.</p>
-
-          <div className="flex items-center space-x-6">
-            <button
-              onClick={() => navigate('privacy')}
-              className="hover:text-stone-300 transition"
-            >
-              Privacy Policy
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => navigate('terms')}
-              className="hover:text-stone-300 transition"
-            >
-              Terms of Sale
-            </button>
-            <span>·</span>
-            <button
-              onClick={() => navigate('contact')}
-              className="hover:text-stone-300 transition"
-            >
-              Contact
-            </button>
-            <span>·</span>
-            {/* Discreet Admin Login Link */}
-            <button
-              onClick={() => navigate('admin-login')}
-              className="text-purple-400/60 hover:text-purple-300 transition"
-              title="Admin Portal"
-            >
-              Admin
-            </button>
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">
+            <div className="flex items-center space-x-4 sm:space-x-6">
+              <button
+                onClick={() => navigate('privacy')}
+                className="hover:text-stone-300 transition"
+              >
+                Privacy Policy
+              </button>
+              <span className="hidden sm:inline">·</span>
+              <button
+                onClick={() => navigate('terms')}
+                className="hover:text-stone-300 transition"
+              >
+                Terms of Sale
+              </button>
+              <span className="hidden sm:inline">·</span>
+              <button
+                onClick={() => navigate('contact')}
+                className="hover:text-stone-300 transition"
+              >
+                Contact
+              </button>
+              <span className="hidden sm:inline">·</span>
+              {/* Discreet Admin Login Link */}
+              <button
+                onClick={() => navigate('admin-login')}
+                className="text-purple-400/60 hover:text-purple-300 transition"
+                title="Admin Portal"
+              >
+                Admin
+              </button>
+            </div>
+            <span className="hidden sm:inline text-stone-700">|</span>
+            <span className="text-[11px]">
+              Developed by <a href="https://elitewebdevelopers.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-[#8B5CF6] hover:text-purple-400 font-medium transition-colors">Elite</a>
+            </span>
           </div>
         </div>
       </div>

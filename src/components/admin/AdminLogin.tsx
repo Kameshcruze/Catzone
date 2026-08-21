@@ -4,8 +4,8 @@ import { Lock, Mail, ArrowRight, ShieldCheck, AlertCircle, ArrowLeft, KeyRound }
 
 export const AdminLogin: React.FC = () => {
   const { loginAdmin, navigate, isAdminLoggedIn } = useStore();
-  const [email, setEmail] = useState('admin');
-  const [password, setPassword] = useState('admin1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   if (isAdminLoggedIn) {
@@ -21,7 +21,7 @@ export const AdminLogin: React.FC = () => {
     if (success) {
       navigate('admin-dashboard');
     } else {
-      setError('Invalid credentials. Use admin / admin1234');
+      setError('Invalid credentials.');
     }
   };
 
@@ -102,23 +102,6 @@ export const AdminLogin: React.FC = () => {
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Demo Credentials Box */}
-        <div className="p-4 bg-purple-50/70 rounded-2xl border border-purple-100 text-xs space-y-2">
-          <div className="flex items-center justify-between text-[#191816] font-semibold">
-            <span>Demo Credentials</span>
-            <button
-              onClick={handleQuickDemo}
-              className="text-[#8B5CF6] underline font-bold hover:text-[#7C3AED]"
-            >
-              1-Click Demo Login
-            </button>
-          </div>
-          <div className="text-[11px] text-stone-500 font-mono space-y-0.5">
-            <p>ID / Username: admin</p>
-            <p>Password: admin1234</p>
-          </div>
-        </div>
 
         {/* Back Link */}
         <div className="text-center pt-2">
