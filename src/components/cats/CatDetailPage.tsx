@@ -3,6 +3,7 @@ import { useStore } from '../../context/StoreContext';
 import { WhatsAppCheckoutModal } from '../checkout/WhatsAppCheckoutModal';
 import { CatCard } from './CatCard';
 import { normalizeImageUrl, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtils';
+import { ImageLightbox } from '../ui/ImageLightbox';
 import {
   ArrowLeft,
   MessageCircle,
@@ -27,6 +28,7 @@ export const CatDetailPage: React.FC = () => {
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
   if (!cat) {
@@ -65,7 +67,8 @@ export const CatDetailPage: React.FC = () => {
 
   const handleShare = () => {
     try {
-      navigator.clipboard.writeText(window.location.href);
+      const shareUrl = `${window.location.origin}/cat/${cat.id}`;
+      navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -110,10 +113,11 @@ export const CatDetailPage: React.FC = () => {
               <div>
                 <div className="relative aspect-4/3 sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-purple-100 shadow-inner mb-4">
                   <img
+                    onClick={() => setIsLightboxOpen(true)}
                     src={images[activeImageIdx] || cat.main_image}
                     alt={cat.name}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover cursor-zoom-in"
                   />
 
                   {images.length > 1 && (
@@ -350,6 +354,13 @@ export const CatDetailPage: React.FC = () => {
         cat={cat}
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
+      />
+
+      <ImageLightbox
+        images={images}
+        initialIdx={activeImageIdx}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
       />
     </div>
   );

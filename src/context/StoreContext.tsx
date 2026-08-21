@@ -126,51 +126,54 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [isAdminLoggedIn]);
 
-  // Handle URL hash changes
+  // Handle URL path changes
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '').trim();
-      if (!hash) {
+    const handleLocationChange = () => {
+      const path = window.location.pathname.replace(/^\/+/, '').trim();
+      
+      if (!path) {
         // default home
+        setCurrentPage('home');
+        setNavParams({});
         return;
       }
       
-      if (hash.startsWith('cat/')) {
-        const catId = hash.replace('cat/', '');
+      if (path.startsWith('cat/')) {
+        const catId = path.replace('cat/', '');
         setCurrentPage('cat-detail');
         setNavParams({ catId });
-      } else if (hash.startsWith('category/')) {
-        const slug = hash.replace('category/', '');
+      } else if (path.startsWith('category/')) {
+        const slug = path.replace('category/', '');
         setCurrentPage('category-detail');
         setNavParams({ categorySlug: slug });
-      } else if (hash.startsWith('admin/cats/edit/')) {
-        const editCatId = hash.replace('admin/cats/edit/', '');
+      } else if (path.startsWith('admin/cats/edit/')) {
+        const editCatId = path.replace('admin/cats/edit/', '');
         setCurrentPage('admin-cat-edit');
         setNavParams({ editCatId });
-      } else if (hash === 'admin/login') {
+      } else if (path === 'admin/login') {
         setCurrentPage('admin-login');
-      } else if (hash === 'admin' || hash === 'admin/dashboard') {
+      } else if (path === 'admin' || path === 'admin/dashboard') {
         setCurrentPage('admin-dashboard');
-      } else if (hash === 'admin/cats') {
+      } else if (path === 'admin/cats') {
         setCurrentPage('admin-cats');
-      } else if (hash === 'admin/cats/new') {
+      } else if (path === 'admin/cats/new') {
         setCurrentPage('admin-cat-new');
-      } else if (hash === 'admin/categories') {
+      } else if (path === 'admin/categories') {
         setCurrentPage('admin-categories');
-      } else if (hash === 'admin/enquiries') {
+      } else if (path === 'admin/enquiries') {
         setCurrentPage('admin-enquiries');
-      } else if (hash === 'admin/settings') {
+      } else if (path === 'admin/settings') {
         setCurrentPage('admin-settings');
       } else if (
-        ['cats', 'categories', 'about', 'why-catzone', 'faq', 'contact', 'privacy', 'terms'].includes(hash)
+        ['cats', 'categories', 'about', 'why-catzone', 'faq', 'contact', 'privacy', 'terms'].includes(path)
       ) {
-        setCurrentPage(hash as ActivePage);
+        setCurrentPage(path as ActivePage);
       }
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   const navigate = (page: ActivePage, params?: NavigationParams) => {
@@ -178,74 +181,70 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setNavParams(params || {});
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Update browser hash for bookmarking and back button
-    let newHash = '';
+    // Update browser path for bookmarking and back button
+    let newPath = '/';
     switch (page) {
       case 'home':
-        newHash = '';
+        newPath = '/';
         break;
       case 'cats':
-        newHash = '#cats';
+        newPath = '/cats';
         break;
       case 'cat-detail':
-        newHash = `#cat/${params?.catId || ''}`;
+        newPath = `/cat/${params?.catId || ''}`;
         break;
       case 'categories':
-        newHash = '#categories';
+        newPath = '/categories';
         break;
       case 'category-detail':
-        newHash = `#category/${params?.categorySlug || ''}`;
+        newPath = `/category/${params?.categorySlug || ''}`;
         break;
       case 'about':
-        newHash = '#about';
+        newPath = '/about';
         break;
       case 'why-catzone':
-        newHash = '#why-catzone';
+        newPath = '/why-catzone';
         break;
       case 'faq':
-        newHash = '#faq';
+        newPath = '/faq';
         break;
       case 'contact':
-        newHash = '#contact';
+        newPath = '/contact';
         break;
       case 'privacy':
-        newHash = '#privacy';
+        newPath = '/privacy';
         break;
       case 'terms':
-        newHash = '#terms';
+        newPath = '/terms';
         break;
       case 'admin-login':
-        newHash = '#admin/login';
+        newPath = '/admin/login';
         break;
       case 'admin-dashboard':
-        newHash = '#admin/dashboard';
+        newPath = '/admin/dashboard';
         break;
       case 'admin-cats':
-        newHash = '#admin/cats';
+        newPath = '/admin/cats';
         break;
       case 'admin-cat-new':
-        newHash = '#admin/cats/new';
+        newPath = '/admin/cats/new';
         break;
       case 'admin-cat-edit':
-        newHash = `#admin/cats/edit/${params?.editCatId || ''}`;
+        newPath = `/admin/cats/edit/${params?.editCatId || ''}`;
         break;
       case 'admin-categories':
-        newHash = '#admin/categories';
+        newPath = '/admin/categories';
         break;
       case 'admin-enquiries':
-        newHash = '#admin/enquiries';
+        newPath = '/admin/enquiries';
         break;
       case 'admin-settings':
-        newHash = '#admin/settings';
+        newPath = '/admin/settings';
         break;
     }
 
-    if (window.location.hash !== newHash) {
-      if (!newHash) {
-        window.history.pushState(null, '', window.location.pathname);
-      } else {
-        window.location.hash = newHash;
-      }
+    if (window.location.pathname !== newPath) {
+      window.history.pushState(null, '', newPath);
     }
   };
 

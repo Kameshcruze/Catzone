@@ -3,6 +3,7 @@ import { Cat } from '../../types';
 import { useStore } from '../../context/StoreContext';
 import { WhatsAppCheckoutModal } from '../checkout/WhatsAppCheckoutModal';
 import { normalizeImageUrl, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtils';
+import { ImageLightbox } from '../ui/ImageLightbox';
 import {
   X,
   MessageCircle,
@@ -29,6 +30,7 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
   const { navigate, categories } = useStore();
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
   if (!isOpen || !cat) return null;
@@ -43,7 +45,8 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
 
   const handleShare = () => {
     try {
-      navigator.clipboard.writeText(window.location.href);
+      const shareUrl = `${window.location.origin}/cat/${cat.id}`;
+      navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -89,10 +92,11 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
                 {/* Main Active Image with Prev/Next Controls */}
                 <div className="relative aspect-4/3 sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-purple-100 shadow-inner mb-3">
                   <img
+                    onClick={() => setIsLightboxOpen(true)}
                     src={images[activeImageIdx] || cat.main_image}
                     alt={`${cat.name} photo`}
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover transition-all duration-300"
+                    className="w-full h-full object-cover transition-all duration-300 cursor-zoom-in"
                   />
 
                   {images.length > 1 && (
@@ -327,6 +331,13 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
         cat={cat}
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
+      />
+
+      <ImageLightbox
+        images={images}
+        initialIdx={activeImageIdx}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
       />
     </>
   );

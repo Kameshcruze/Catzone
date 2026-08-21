@@ -6,12 +6,9 @@ import { normalizeImageUrl, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtil
 export const HeroSection: React.FC = () => {
   const { navigate, cats } = useStore();
 
-  let featuredCats = cats.filter(c => c.is_featured && c.is_available);
-  if (featuredCats.length < 2) {
-    const fallbackCats = cats.filter(c => c.is_available && !c.is_featured);
-    featuredCats = [...featuredCats, ...fallbackCats];
-  }
-  const displayCats = featuredCats.slice(0, 2);
+  // The 'cats' array is already sorted newest-first by the StoreContext
+  // So we just take the first 2 available cats
+  const displayCats = cats.filter(c => c.is_available).slice(0, 2);
 
   const availableCount = cats.filter((c) => c.is_available).length;
 
