@@ -113,7 +113,7 @@ export const AdminCatForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name?.trim() || !formData.cat_id?.trim()) {
       setError('Please fill in Cat Name and Cat ID.');
@@ -125,38 +125,41 @@ export const AdminCatForm: React.FC = () => {
       normalizeImageUrl(img)
     );
 
-    if (isEditing && editCatId) {
-      updateCat(editCatId, {
-        ...formData,
-        main_image: cleanedMain,
-        gallery_images: cleanedGallery,
-      });
-    } else {
-      addCat({
-        name: formData.name || 'Pedigree Kitten',
-        cat_id: formData.cat_id || `CZ-${Math.floor(100 + Math.random() * 900)}`,
-        category_id: formData.category_id || categories[0]?.id,
-        breed: formData.breed || 'British Shorthair',
-        gender: (formData.gender as 'Male' | 'Female') || 'Male',
-        age_months: Number(formData.age_months) || 3,
-        date_of_birth: formData.date_of_birth,
-        color: formData.color || 'Solid',
-        price: Number(formData.price) || 50000,
-        vaccinated: !!formData.vaccinated,
-        dewormed: !!formData.dewormed,
-        microchipped: !!formData.microchipped,
-        health_status: formData.health_status || 'Clinically vet-verified and microchipped',
-        personality: formData.personality || 'Affectionate',
-        description: formData.description || 'Verified purebred cattery pedigree companion.',
-        location: formData.location || 'Bengaluru Cattery Suite',
-        main_image: cleanedMain,
-        gallery_images: cleanedGallery.length ? cleanedGallery : [cleanedMain],
-        is_available: formData.is_available !== undefined ? formData.is_available : true,
-        is_featured: !!formData.is_featured,
-      });
+    try {
+      if (isEditing && editCatId) {
+        await updateCat(editCatId, {
+          ...formData,
+          main_image: cleanedMain,
+          gallery_images: cleanedGallery,
+        });
+      } else {
+        await addCat({
+          name: formData.name || 'Pedigree Kitten',
+          cat_id: formData.cat_id || `CZ-${Math.floor(100 + Math.random() * 900)}`,
+          category_id: formData.category_id || categories[0]?.id,
+          breed: formData.breed || 'British Shorthair',
+          gender: (formData.gender as 'Male' | 'Female') || 'Male',
+          age: formData.age || '3 Months',
+          date_of_birth: formData.date_of_birth || '',
+          color: formData.color || 'Solid',
+          price: Number(formData.price) || 50000,
+          vaccinated: !!formData.vaccinated,
+          dewormed: !!formData.dewormed,
+          health_status: formData.health_status || 'Clinically vet-verified and microchipped',
+          personality: formData.personality || 'Affectionate',
+          description: formData.description || 'Verified purebred cattery pedigree companion.',
+          location: formData.location || 'Bengaluru Cattery Suite',
+          main_image: cleanedMain,
+          gallery_images: cleanedGallery.length ? cleanedGallery : [cleanedMain],
+          is_available: formData.is_available !== undefined ? formData.is_available : true,
+          is_featured: !!formData.is_featured,
+        });
+      }
+      navigate('admin-cats');
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to save cat. ' + (err.message || ''));
     }
-
-    navigate('admin-cats');
   };
 
   const addGalleryImage = () => {

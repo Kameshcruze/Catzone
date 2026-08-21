@@ -35,7 +35,7 @@ import { AdminEnquiries } from './components/admin/AdminEnquiries';
 import { AdminSettings } from './components/admin/AdminSettings';
 
 const AppContent: React.FC = () => {
-  const { currentPage } = useStore();
+  const { currentPage, isLoading, error } = useStore();
 
   // Scroll to top on page switch
   useEffect(() => {
@@ -46,6 +46,32 @@ const AppContent: React.FC = () => {
 
   // Render Current Page
   const renderCurrentView = () => {
+    if (isLoading) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="w-12 h-12 border-4 border-[#E5E7EB] border-t-[#8B5CF6] rounded-full animate-spin mb-4"></div>
+          <p className="text-[#6B7280] font-medium tracking-wide">Loading sanctuary data...</p>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4">
+            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Connection Error</h2>
+          <p className="text-gray-600 max-w-md">{error}</p>
+          <button onClick={() => window.location.reload()} className="mt-6 px-6 py-2 bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white rounded-full font-medium hover:opacity-90 transition">
+            Try Again
+          </button>
+        </div>
+      );
+    }
+
     switch (currentPage) {
       case 'home':
         return (

@@ -16,24 +16,34 @@ import {
 } from 'lucide-react';
 
 export const AdminSettings: React.FC = () => {
-  const { settings, updateSettings, resetToDefaultData } = useStore();
+  const { settings, updateSettings, resetToDefaults } = useStore();
   const [formData, setFormData] = useState(settings);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateSettings(formData);
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3000);
+    try {
+      await updateSettings(formData);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 3000);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save settings.');
+    }
   };
 
-  const handleResetConfirm = () => {
-    resetToDefaultData();
-    setShowResetConfirm(false);
-    setFormData(settings);
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3000);
+  const handleResetConfirm = async () => {
+    try {
+      await resetToDefaults();
+      setShowResetConfirm(false);
+      setFormData(settings);
+      setSavedSuccess(true);
+      setTimeout(() => setSavedSuccess(false), 3000);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to reset settings.');
+    }
   };
 
   return (

@@ -61,7 +61,7 @@ export const AdminCategories: React.FC = () => {
     setIsCreating(false);
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
@@ -69,24 +69,29 @@ export const AdminCategories: React.FC = () => {
       formData.slug.trim() ||
       formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    if (editingCategory) {
-      updateCategory(editingCategory.id, {
-        name: formData.name,
-        slug,
-        description: formData.description,
-        image_url: formData.image_url,
-        is_active: formData.is_active,
-      });
-      setEditingCategory(null);
-    } else {
-      addCategory({
-        name: formData.name,
-        slug,
-        description: formData.description,
-        image_url: formData.image_url,
-        is_active: formData.is_active,
-      });
-      setIsCreating(false);
+    try {
+      if (editingCategory) {
+        await updateCategory(editingCategory.id, {
+          name: formData.name,
+          slug,
+          description: formData.description,
+          image_url: formData.image_url,
+          is_active: formData.is_active,
+        });
+        setEditingCategory(null);
+      } else {
+        await addCategory({
+          name: formData.name,
+          slug,
+          description: formData.description,
+          image_url: formData.image_url,
+          is_active: formData.is_active,
+        });
+        setIsCreating(false);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save category.');
     }
   };
 

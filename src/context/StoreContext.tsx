@@ -18,29 +18,31 @@ interface StoreContextType {
   isAdminLoggedIn: boolean;
   currentPage: ActivePage;
   navParams: NavigationParams;
+  isLoading: boolean;
+  error: string | null;
   
   // Navigation
   navigate: (page: ActivePage, params?: NavigationParams) => void;
   
   // Cat Actions
-  addCat: (cat: Omit<Cat, 'id' | 'created_at' | 'updated_at'>) => Cat;
-  updateCat: (id: string, cat: Partial<Cat>) => void;
-  deleteCat: (id: string) => void;
-  toggleAvailability: (id: string) => void;
+  addCat: (cat: Omit<Cat, 'id' | 'created_at' | 'updated_at'>) => Promise<Cat>;
+  updateCat: (id: string, cat: Partial<Cat>) => Promise<void>;
+  deleteCat: (id: string) => Promise<void>;
+  toggleAvailability: (id: string) => Promise<void>;
   
   // Category Actions
-  addCategory: (category: Omit<Category, 'id' | 'created_at' | 'updated_at'>) => Category;
-  updateCategory: (id: string, category: Partial<Category>) => void;
-  deleteCategory: (id: string) => void;
+  addCategory: (category: Omit<Category, 'id' | 'created_at' | 'updated_at'>) => Promise<Category>;
+  updateCategory: (id: string, category: Partial<Category>) => Promise<void>;
+  deleteCategory: (id: string) => Promise<void>;
   
   // Enquiry Actions
-  createEnquiry: (enquiry: Omit<Enquiry, 'id' | 'created_at'>) => Enquiry;
-  updateEnquiryStatus: (id: string, status: EnquiryStatus) => void;
-  deleteEnquiry: (id: string) => void;
+  createEnquiry: (enquiry: Omit<Enquiry, 'id' | 'created_at'>) => Promise<Enquiry>;
+  updateEnquiryStatus: (id: string, status: EnquiryStatus) => Promise<void>;
+  deleteEnquiry: (id: string) => Promise<void>;
   
   // Settings Actions
-  updateSettings: (newSettings: Partial<SiteSettings>) => void;
-  resetToDefaults: () => void;
+  updateSettings: (newSettings: Partial<SiteSettings>) => Promise<void>;
+  resetToDefaults: () => Promise<void>;
   
   // Auth Actions
   loginAdmin: (email: string, pass: string) => boolean;
@@ -56,67 +58,17 @@ interface StoreContextType {
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
+import { supabase } from '../lib/supabase';
+
 const STORAGE_KEYS = {
-  CATS: 'catzone_cats_v1',
-  CATEGORIES: 'catzone_categories_v1',
-  ENQUIRIES: 'catzone_enquiries_v1',
-  SETTINGS: 'catzone_settings_v1',
   ADMIN_AUTH: 'catzone_admin_auth_v1',
 };
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cats, setCats] = useState<Cat[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.CATS);
-      return saved ? JSON.parse(saved) : DEFAULT_CATS;
-    } catch {
-      return DEFAULT_CATS;
-    }
-  });
-
-  const [categories, setCategories] = useState<Category[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
-      return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
-    } catch {
-      return DEFAULT_CATEGORIES;
-    }
-  });
-
-  const [enquiries, setEnquiries] = useState<Enquiry[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ENQUIRIES);
-      return saved ? JSON.parse(saved) : DEFAULT_ENQUIRIES;
-    } catch {
-      return DEFAULT_ENQUIRIES;
-    }
-  });
-
-  const [settings, setSettings] = useState<SiteSettings>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        // Ensure new contact information is always prioritized
-        const cleanedAnnouncement = parsed.announcement_bar
-          ? parsed.announcement_bar.replace(/✨/g, '').trim()
-          : DEFAULT_SETTINGS.announcement_bar;
-
-        return {
-          ...DEFAULT_SETTINGS,
-          ...parsed,
-          announcement_bar: cleanedAnnouncement,
-          whatsapp_number: parsed.whatsapp_number === '919840012345' ? '919585262522' : parsed.whatsapp_number || '919585262522',
-          contact_email: parsed.contact_email === 'concierge@catzone.in' ? 'support@catzone.in' : parsed.contact_email || 'support@catzone.in',
-          contact_phone: parsed.contact_phone === '+91 (0) 98400 12345' ? '+91 95852 62522' : parsed.contact_phone || '+91 95852 62522',
-          address: parsed.address && parsed.address.includes('Jubilee Hills') ? 'CatZone Sanctuary & Cattery, Karur, India' : parsed.address || 'CatZone Sanctuary & Cattery, Karur, India',
-        };
-      }
-      return DEFAULT_SETTINGS;
-    } catch {
-      return DEFAULT_SETTINGS;
-    }
-  });
+  const [cats, setCats] = useState<Cat[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
     try {
@@ -129,39 +81,42 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [currentPage, setCurrentPage] = useState<ActivePage>('home');
   const [navParams, setNavParams] = useState<NavigationParams>({});
-
-  // Sync to local storage on changes
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.CATS, JSON.stringify(cats));
-    } catch (e) {
-      console.warn('Failed to save cats to localStorage', e);
-    }
-  }, [cats]);
+  
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
-    } catch (e) {
-      console.warn('Failed to save categories to localStorage', e);
-    }
-  }, [categories]);
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const [catsRes, categoriesRes, enquiriesRes, settingsRes] = await Promise.all([
+          supabase.from('cats').select('*').order('created_at', { ascending: false }),
+          supabase.from('categories').select('*').order('display_order', { ascending: true }),
+          supabase.from('enquiries').select('*').order('created_at', { ascending: false }),
+          supabase.from('settings').select('*').eq('id', 'global_settings').maybeSingle()
+        ]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(enquiries));
-    } catch (e) {
-      console.warn('Failed to save enquiries to localStorage', e);
-    }
-  }, [enquiries]);
+        if (catsRes.error) throw new Error(catsRes.error.message);
+        if (categoriesRes.error) throw new Error(categoriesRes.error.message);
+        if (enquiriesRes.error) throw new Error(enquiriesRes.error.message);
+        if (settingsRes.error) throw new Error(settingsRes.error.message);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(settings));
-    } catch (e) {
-      console.warn('Failed to save settings to localStorage', e);
+        setCats((catsRes.data as unknown as Cat[]) || []);
+        setCategories((categoriesRes.data as unknown as Category[]) || []);
+        setEnquiries((enquiriesRes.data as unknown as Enquiry[]) || []);
+        
+        if (settingsRes.data) {
+          setSettings(settingsRes.data as unknown as SiteSettings);
+        }
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch data from Supabase.');
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, [settings]);
+    fetchData();
+  }, []);
 
   useEffect(() => {
     try {
@@ -295,90 +250,98 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Cat Operations
-  const addCat = (catData: Omit<Cat, 'id' | 'created_at' | 'updated_at'>): Cat => {
-    const id = `cat-${Date.now()}`;
-    const now = new Date().toISOString();
-    const newCat: Cat = {
-      ...catData,
-      id,
-      created_at: now,
-      updated_at: now,
-    };
+  const addCat = async (catData: Omit<Cat, 'id' | 'created_at' | 'updated_at'>): Promise<Cat> => {
+    const { data, error } = await supabase.from('cats').insert([{ ...catData }]).select().single();
+    if (error) throw new Error(error.message);
+    const newCat = data as unknown as Cat;
     setCats((prev) => [newCat, ...prev]);
     return newCat;
   };
 
-  const updateCat = (id: string, updatedFields: Partial<Cat>) => {
-    const now = new Date().toISOString();
+  const updateCat = async (id: string, updatedFields: Partial<Cat>): Promise<void> => {
+    const { error } = await supabase.from('cats').update({ ...updatedFields, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) throw new Error(error.message);
     setCats((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, ...updatedFields, updated_at: now } : item))
+      prev.map((item) => (item.id === id ? { ...item, ...updatedFields, updated_at: new Date().toISOString() } : item))
     );
   };
 
-  const deleteCat = (id: string) => {
+  const deleteCat = async (id: string): Promise<void> => {
+    const { error } = await supabase.from('cats').delete().eq('id', id);
+    if (error) throw new Error(error.message);
     setCats((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const toggleAvailability = (id: string) => {
-    const now = new Date().toISOString();
+  const toggleAvailability = async (id: string): Promise<void> => {
+    const cat = cats.find(c => c.id === id);
+    if (!cat) return;
+    const { error } = await supabase.from('cats').update({ is_available: !cat.is_available, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) throw new Error(error.message);
     setCats((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, is_available: !item.is_available, updated_at: now } : item
+        item.id === id ? { ...item, is_available: !item.is_available, updated_at: new Date().toISOString() } : item
       )
     );
   };
 
   // Category Operations
-  const addCategory = (categoryData: Omit<Category, 'id' | 'created_at' | 'updated_at'>): Category => {
-    const id = `cat-cat-${Date.now()}`;
-    const now = new Date().toISOString();
-    const newCat: Category = {
-      ...categoryData,
-      id,
-      created_at: now,
-      updated_at: now,
-    };
+  const addCategory = async (categoryData: Omit<Category, 'id' | 'created_at' | 'updated_at'>): Promise<Category> => {
+    // Generate a simple id since categories uses TEXT id
+    const id = categoryData.slug || `cat-${Date.now()}`;
+    const { data, error } = await supabase.from('categories').insert([{ ...categoryData, id }]).select().single();
+    if (error) throw new Error(error.message);
+    const newCat = data as unknown as Category;
     setCategories((prev) => [...prev, newCat]);
     return newCat;
   };
 
-  const updateCategory = (id: string, updatedFields: Partial<Category>) => {
-    const now = new Date().toISOString();
+  const updateCategory = async (id: string, updatedFields: Partial<Category>): Promise<void> => {
+    const { error } = await supabase.from('categories').update({ ...updatedFields, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) throw new Error(error.message);
     setCategories((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, ...updatedFields, updated_at: now } : item
+        item.id === id ? { ...item, ...updatedFields, updated_at: new Date().toISOString() } : item
       )
     );
   };
 
-  const deleteCategory = (id: string) => {
+  const deleteCategory = async (id: string): Promise<void> => {
+    const { error } = await supabase.from('categories').delete().eq('id', id);
+    if (error) throw new Error(error.message);
     setCategories((prev) => prev.filter((item) => item.id !== id));
   };
 
   // Enquiry Operations
-  const createEnquiry = (enquiryData: Omit<Enquiry, 'id' | 'created_at'>): Enquiry => {
-    const id = `enq-${Date.now()}`;
-    const newEnq: Enquiry = {
-      ...enquiryData,
-      id,
-      created_at: new Date().toISOString(),
-    };
+  const createEnquiry = async (enquiryData: Omit<Enquiry, 'id' | 'created_at'>): Promise<Enquiry> => {
+    const { data, error } = await supabase.from('enquiries').insert([{ ...enquiryData }]).select().single();
+    if (error) throw new Error(error.message);
+    const newEnq = data as unknown as Enquiry;
     setEnquiries((prev) => [newEnq, ...prev]);
     return newEnq;
   };
 
-  const updateEnquiryStatus = (id: string, status: EnquiryStatus) => {
+  const updateEnquiryStatus = async (id: string, status: EnquiryStatus): Promise<void> => {
+    const { error } = await supabase.from('enquiries').update({ status }).eq('id', id);
+    if (error) throw new Error(error.message);
     setEnquiries((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status } : item))
     );
   };
 
-  const deleteEnquiry = (id: string) => {
+  const deleteEnquiry = async (id: string): Promise<void> => {
+    const { error } = await supabase.from('enquiries').delete().eq('id', id);
+    if (error) throw new Error(error.message);
     setEnquiries((prev) => prev.filter((item) => item.id !== id));
   };
 
   // Settings
-  const updateSettings = (newSettings: Partial<SiteSettings>) => {
+  const updateSettings = async (newSettings: Partial<SiteSettings>): Promise<void> => {
+    const { data, error } = await supabase.from('settings').update({ ...newSettings, updated_at: new Date().toISOString() }).eq('id', 'global_settings').select().single();
+    if (error) {
+       // if global_settings doesn't exist, we should upsert it
+       const { error: upsertError } = await supabase.from('settings').upsert({ id: 'global_settings', ...settings, ...newSettings, updated_at: new Date().toISOString() });
+       if (upsertError) throw new Error(upsertError.message);
+    }
     setSettings((prev) => ({
       ...prev,
       ...newSettings,
@@ -386,19 +349,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }));
   };
 
-  const resetToDefaults = () => {
+  const resetToDefaults = async (): Promise<void> => {
+    // Note: Reset to defaults in a production DB might require truncating tables.
+    // For now we just reset the local state, but usually you wouldn't reset DB defaults globally without care.
+    console.warn("Reset to defaults does not wipe the Supabase database automatically.");
     setCats(DEFAULT_CATS);
     setCategories(DEFAULT_CATEGORIES);
     setEnquiries(DEFAULT_ENQUIRIES);
     setSettings(DEFAULT_SETTINGS);
-    try {
-      localStorage.setItem(STORAGE_KEYS.CATS, JSON.stringify(DEFAULT_CATS));
-      localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(DEFAULT_CATEGORIES));
-      localStorage.setItem(STORAGE_KEYS.ENQUIRIES, JSON.stringify(DEFAULT_ENQUIRIES));
-      localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(DEFAULT_SETTINGS));
-    } catch {
-      // ignore
-    }
   };
 
   // Admin Auth
@@ -447,6 +405,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         isAdminLoggedIn,
         currentPage,
         navParams,
+        isLoading,
+        error,
         navigate,
         addCat,
         updateCat,

@@ -32,7 +32,7 @@ export const WhatsAppCheckoutModal: React.FC<WhatsAppCheckoutModalProps> = ({
 
   if (!isOpen || !cat) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -50,30 +50,35 @@ export const WhatsAppCheckoutModal: React.FC<WhatsAppCheckoutModalProps> = ({
       return;
     }
 
-    // 1. Record enquiry in store / database
-    createEnquiry({
-      cat_id: cat.cat_id,
-      cat_name: cat.name,
-      cat_breed: cat.breed,
-      cat_price: cat.price,
-      customer_name: formData.customer_name.trim(),
-      phone: formData.phone.trim(),
-      email: formData.email.trim(),
-      city: formData.city?.trim() || 'India',
-      message: formData.message?.trim() || 'Interested in adopting this cat.',
-      status: 'New',
-    });
-
-    // 2. Generate WhatsApp URL
-    const waUrl = generateWhatsAppUrl(cat, formData, settings);
-    setLastWhatsAppUrl(waUrl);
-    setSubmitted(true);
-
-    // 3. Open WhatsApp in new tab
     try {
-      window.open(waUrl, '_blank', 'noopener,noreferrer');
-    } catch {
-      // fallback in case popup blocked
+      // 1. Record enquiry in store / database
+      await createEnquiry({
+        cat_id: cat.cat_id,
+        cat_name: cat.name,
+        cat_breed: cat.breed,
+        cat_price: cat.price,
+        customer_name: formData.customer_name.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        city: formData.city?.trim() || 'India',
+        message: formData.message?.trim() || 'Interested in adopting this cat.',
+        status: 'New',
+      });
+
+      // 2. Generate WhatsApp URL
+      const waUrl = generateWhatsAppUrl(cat, formData, settings);
+      setLastWhatsAppUrl(waUrl);
+      setSubmitted(true);
+
+      // 3. Open WhatsApp in new tab
+      try {
+        window.open(waUrl, '_blank', 'noopener,noreferrer');
+      } catch {
+        // fallback in case popup blocked
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to record enquiry. Please try again or contact us directly.');
     }
   };
 
