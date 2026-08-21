@@ -72,7 +72,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEYS.ADMIN_AUTH);
+      const saved = sessionStorage.getItem(STORAGE_KEYS.ADMIN_AUTH);
       return saved === 'true';
     } catch {
       return false;
@@ -120,10 +120,47 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, isAdminLoggedIn ? 'true' : 'false');
+      sessionStorage.setItem(STORAGE_KEYS.ADMIN_AUTH, isAdminLoggedIn ? 'true' : 'false');
     } catch (e) {
       console.warn('Failed to save auth state', e);
     }
+  }, [isAdminLoggedIn]);
+
+  // Handle Admin Inactivity Timeout (10 minutes)
+  useEffect(() => {
+    if (!isAdminLoggedIn) return;
+
+    let inactivityTimer: NodeJS.Timeout;
+    
+    const logout = () => {
+      setIsAdminLoggedIn(false);
+      setCurrentPage('admin-login');
+      window.history.pushState(null, '', '/admin/login');
+    };
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(logout, 10 * 60 * 1000); // 10 minutes
+    };
+
+    const handleActivity = () => resetTimer();
+
+    // Set initial timer
+    resetTimer();
+
+    // Listen to user activity events
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('scroll', handleActivity);
+    window.addEventListener('click', handleActivity);
+
+    return () => {
+      clearTimeout(inactivityTimer);
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('scroll', handleActivity);
+      window.removeEventListener('click', handleActivity);
+    };
   }, [isAdminLoggedIn]);
 
   // Handle URL path changes

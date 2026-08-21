@@ -17,6 +17,27 @@ async function startServer() {
       appType: "spa",
     });
     app.use(vite.middlewares);
+    
+    // Explicitly add a fallback for SPA routes in dev mode
+    app.use('*', async (req, res, next) => {
+      try {
+        const url = req.originalUrl;
+        let template = '<!DOCTYPE html><html><head></head><body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body></html>';
+        // Check if index.html exists in root and read it, otherwise use fallback
+        try {
+          const fs = await import('fs');
+          template = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf-8');
+        } catch (e) {
+          // ignore
+        }
+        
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
