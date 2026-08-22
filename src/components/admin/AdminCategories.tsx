@@ -89,6 +89,8 @@ export const AdminCategories: React.FC = () => {
     const slug =
       formData.slug.trim() ||
       formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      
+    const cleanedImageUrl = formData.image_url ? normalizeImageUrl(formData.image_url) : '';
 
     try {
       if (editingCategory) {
@@ -96,7 +98,7 @@ export const AdminCategories: React.FC = () => {
           name: formData.name,
           slug,
           description: formData.description,
-          image_url: formData.image_url,
+          image_url: cleanedImageUrl,
           is_active: formData.is_active,
         });
         setEditingCategory(null);
@@ -105,7 +107,7 @@ export const AdminCategories: React.FC = () => {
           name: formData.name,
           slug,
           description: formData.description,
-          image_url: formData.image_url,
+          image_url: cleanedImageUrl,
           is_active: formData.is_active,
         });
         setIsCreating(false);
@@ -146,7 +148,7 @@ export const AdminCategories: React.FC = () => {
                 <div>
                   <div className="relative aspect-16/9 w-full bg-stone-200 overflow-hidden">
                     <img
-                      src={cat.image_url}
+                      src={normalizeImageUrl(cat.image_url)}
                       alt={cat.name}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover"

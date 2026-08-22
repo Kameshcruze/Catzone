@@ -1,3 +1,4 @@
+import { normalizeImageUrl } from "../../utils/imageUtils";
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
 import { ArrowRight, Compass } from 'lucide-react';
@@ -37,7 +38,7 @@ export const CategoriesPage: React.FC = () => {
               >
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-stone-200">
                   <img
-                    src={cat.image_url}
+                    src={normalizeImageUrl(cat.image_url)}
                     alt={cat.name}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

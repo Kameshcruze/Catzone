@@ -1,3 +1,4 @@
+import { normalizeImageUrl } from "../../utils/imageUtils";
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
 import { ArrowRight, Compass } from 'lucide-react';
@@ -53,7 +54,7 @@ export const CategoryDiscoverySection: React.FC = () => {
                 {/* Image Wrap */}
                 <div className={`relative w-full overflow-hidden bg-stone-100 ${isLarge ? 'aspect-16/9 sm:aspect-2/1' : 'aspect-4/3'}`}>
                   <img
-                    src={cat.image_url}
+                    src={normalizeImageUrl(cat.image_url)}
                     alt={cat.name}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

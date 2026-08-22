@@ -1,3 +1,4 @@
+import { normalizeImageUrl } from "../../utils/imageUtils";
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { CatCard } from '../cats/CatCard';
@@ -65,7 +66,7 @@ export const CategoryDetailPage: React.FC = () => {
         <div className="relative rounded-3xl overflow-hidden bg-stone-900 text-white mb-12 shadow-xl border border-purple-900/30">
           <div className="relative aspect-16/7 sm:aspect-21/9 w-full overflow-hidden">
             <img
-              src={category.image_url}
+              src={normalizeImageUrl(category.image_url)}
               alt={category.name}
               referrerPolicy="no-referrer"
               className="w-full h-full object-cover opacity-60"
