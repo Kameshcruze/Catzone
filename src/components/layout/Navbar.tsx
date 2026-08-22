@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
     { label: 'Breeds', page: 'categories' as const },
     { label: 'Why Choose Us', page: 'why-catzone' as const },
     { label: 'About Us', page: 'about' as const },
-    { label: 'Delivery', page: 'faq' as const },
+    { label: 'FAQ', page: 'faq' as const },
     { label: 'Contact', page: 'contact' as const },
   ];
 
