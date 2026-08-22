@@ -15,11 +15,11 @@ export const Footer: React.FC = () => {
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center space-x-2.5">
-              <div className="w-8 h-8 rounded-full overflow-hidden p-0.5 bg-gradient-to-tr from-[#8B5CF6] via-purple-400 to-indigo-500 shadow-xs">
+              <div className="w-8 h-8 flex items-center justify-center">
                 <img
-                  src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=120&q=80"
+                  src="/favicon.png"
                   alt="CatZone Logo"
-                  className="w-full h-full object-cover rounded-full bg-stone-900"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <span className="font-display font-extrabold text-xl tracking-tight text-white">

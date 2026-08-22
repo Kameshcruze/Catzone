@@ -80,12 +80,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       {/* Mobile Top Nav Bar */}
       <div className="md:hidden bg-[#130E20] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b border-purple-900/40">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden border border-purple-400/40 bg-purple-950/60 flex items-center justify-center">
+          <div className="w-8 h-8 flex items-center justify-center">
             <img 
-              src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=120&q=80" 
+              src="/favicon.png" 
               alt="CatZone Logo" 
               referrerPolicy="no-referrer"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
           <span className="font-brand font-bold text-base tracking-widest text-white">
@@ -111,12 +111,12 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
           {/* Brand Header */}
           <div className="p-6 border-b border-purple-900/30 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-purple-400/40 bg-purple-950/60 flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 flex items-center justify-center">
                 <img 
-                  src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=120&q=80" 
+                  src="/favicon.png" 
                   alt="CatZone Logo" 
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div>

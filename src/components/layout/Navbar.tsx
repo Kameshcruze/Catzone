@@ -52,11 +52,11 @@ export const Navbar: React.FC = () => {
             onClick={() => navigate('home')}
             className="flex items-center space-x-2.5 text-left group focus:outline-none"
           >
-            <div className="w-8 h-8 rounded-full overflow-hidden p-0.5 bg-gradient-to-tr from-[#8B5CF6] via-purple-400 to-indigo-500 shadow-xs group-hover:scale-105 transition-transform duration-200">
+            <div className="w-8 h-8 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
               <img
-                src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=120&q=80"
+                src="/favicon.png"
                 alt="CatZone Logo"
-                className="w-full h-full object-cover rounded-full bg-stone-100"
+                className="w-full h-full object-contain"
               />
             </div>
             <span className="font-display font-bold text-xl tracking-tight text-[#111111] group-hover:text-[#7C3AED] transition-colors">
