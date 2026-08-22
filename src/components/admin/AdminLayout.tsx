@@ -75,7 +75,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8FF] flex flex-col md:flex-row">
+    <div className="min-h-[100dvh] bg-[#FAF8FF] flex flex-col md:flex-row">
       
       {/* Mobile Top Nav Bar */}
       <div className="md:hidden bg-[#130E20] text-white px-4 py-3 flex items-center justify-between sticky top-0 z-30 border-b border-purple-900/40">
@@ -103,11 +103,11 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
       {/* Sidebar (Desktop + Mobile Drawer) */}
       <aside
-        className={`fixed md:sticky top-0 h-screen w-64 bg-[#130E20] text-[#EEE9E1] z-40 flex flex-col justify-between border-r border-purple-900/30 transition-transform duration-200 ${
+        className={`fixed md:sticky top-0 h-[100dvh] w-64 bg-[#130E20] text-[#EEE9E1] z-40 flex flex-col justify-between border-r border-purple-900/30 transition-transform duration-200 ${
           mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
-        <div>
+        <div className="flex-1 overflow-y-auto">
           {/* Brand Header */}
           <div className="p-6 border-b border-purple-900/30 flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -168,7 +168,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-purple-900/30 space-y-2">
+        <div className="p-4 border-t border-purple-900/30 space-y-2 shrink-0 bg-[#130E20]">
           <button
             onClick={() => navigate('home')}
             className="w-full flex items-center space-x-2.5 px-3.5 py-2.5 rounded-xl text-xs text-stone-400 hover:text-white hover:bg-purple-950/40 transition"
