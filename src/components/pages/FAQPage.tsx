@@ -17,7 +17,7 @@ export const FAQPage: React.FC = () => {
     {
       category: 'adoption',
       question: 'How does the purchase & WhatsApp checkout process work?',
-      answer: 'Browse our available cats and click "Enquire on WhatsApp". You will enter your contact details, and the platform generates a pre-formatted message with the exact cat ID, breed, and price to our concierge WhatsApp number (+91 95852 62522). We immediately confirm availability, arrange an HD live video call, and guide you through the reservation steps.',
+      answer: 'Browse our available cats and click "Enquire on WhatsApp". You will enter your contact details, and the platform generates a pre-formatted message with the exact cat ID, breed, and price to our concierge WhatsApp number (+91 82708 98054). We immediately confirm availability, arrange an HD live video call, and guide you through the reservation steps.',
     },
     {
       category: 'adoption',

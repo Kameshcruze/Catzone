@@ -71,7 +71,7 @@ export function generateWhatsAppUrl(
   customer: CheckoutCustomerData,
   settings: SiteSettings
 ): string {
-  const targetNumber = cleanPhoneNumber(settings.whatsapp_number || '919840012345');
+  const targetNumber = cleanPhoneNumber(settings.whatsapp_number || '918270898054');
   const messageText = generateWhatsAppMessage(cat, customer, settings);
   const encodedText = encodeURIComponent(messageText);
   return `https://wa.me/${targetNumber}?text=${encodedText}`;

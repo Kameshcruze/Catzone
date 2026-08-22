@@ -62,13 +62,13 @@ export const AdminSettings: React.FC = () => {
               <input
                 type="text"
                 required
-                placeholder="919585262522"
+                placeholder="918270898054"
                 value={formData.whatsapp_number}
                 onChange={(e) => setFormData({ ...formData, whatsapp_number: e.target.value })}
                 className="w-full px-4 py-2.5 bg-[#FAF8FF] border border-purple-100 rounded-xl text-sm font-mono focus:outline-none focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
               />
               <p className="text-[11px] text-stone-500 mt-1.5 leading-relaxed">
-                All &ldquo;Enquire on WhatsApp&rdquo; and concierge checkout buttons across the public website will route purchase leads to this WhatsApp number without modifying code. (Example format: <code>919585262522</code>)
+                All &ldquo;Enquire on WhatsApp&rdquo; and concierge checkout buttons across the public website will route purchase leads to this WhatsApp number without modifying code. (Example format: <code>918270898054</code>)
               </p>
             </div>
 

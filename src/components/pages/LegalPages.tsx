@@ -32,7 +32,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             1. Information Collection
           </h3>
           <p>
-            We only collect personal information that you deliberately provide — including your name, contact phone number (+91 95852 62522), email address (support@catzone.in), city of residence, and pedigree preferences when using our WhatsApp concierge checkout or enquiry forms.
+            We only collect personal information that you deliberately provide — including your name, contact phone number (+91 82708 98054), email address (support@catzone.in), city of residence, and pedigree preferences when using our WhatsApp concierge checkout or enquiry forms.
           </p>
 
           <h3 className="text-base font-display font-bold text-[#191816]">

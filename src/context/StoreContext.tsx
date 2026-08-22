@@ -106,7 +106,18 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setEnquiries((enquiriesRes.data as unknown as Enquiry[]) || []);
         
         if (settingsRes.data) {
-          setSettings(settingsRes.data as unknown as SiteSettings);
+          let loadedSettings = settingsRes.data as unknown as SiteSettings;
+          
+          // Auto-migrate old phone numbers to the new one
+          if (loadedSettings.whatsapp_number !== '918270898054') {
+             loadedSettings = { ...loadedSettings, whatsapp_number: '918270898054', contact_phone: '+91 82708 98054' };
+             supabase.from('settings').update({ 
+               whatsapp_number: '918270898054', 
+               contact_phone: '+91 82708 98054' 
+             }).eq('id', 'global_settings').then();
+          }
+          
+          setSettings(loadedSettings);
         }
       } catch (err: any) {
         console.error(err);
