@@ -13,11 +13,11 @@ export const AdminLogin: React.FC = () => {
     return null;
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    const success = loginAdmin(email, password);
+    const success = await loginAdmin(email, password);
     if (success) {
       navigate('admin-dashboard');
     } else {

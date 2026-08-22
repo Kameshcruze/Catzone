@@ -45,7 +45,7 @@ interface StoreContextType {
   resetToDefaults: () => Promise<void>;
   
   // Auth Actions
-  loginAdmin: (email: string, pass: string) => boolean;
+  loginAdmin: (email: string, pass: string) => Promise<boolean>;
   logoutAdmin: () => void;
   
   // Quick Lookups
@@ -396,20 +396,42 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Admin Auth
-  const loginAdmin = (email: string, pass: string): boolean => {
-    // Verified admin credential handler
-    const cleanEmail = email.trim().toLowerCase();
-    const cleanPass = pass.trim();
-    if (
-      (cleanEmail === 'admin' && cleanPass === 'admin1234') ||
-      (cleanEmail === 'admin@catzone.in' && cleanPass === 'admin1234') ||
-      (cleanEmail === 'admin' && cleanPass === 'catzone2026') ||
-      (cleanEmail === 'admin@catzone.in' && cleanPass === 'catzone2026')
-    ) {
-      setIsAdminLoggedIn(true);
-      return true;
+  const loginAdmin = async (email: string, pass: string): Promise<boolean> => {
+    try {
+      const cleanEmail = email.trim().toLowerCase();
+      const cleanPass = pass.trim();
+      
+      const encoder = new TextEncoder();
+      
+      // Hash email
+      const emailBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(cleanEmail));
+      const emailHash = Array.from(new Uint8Array(emailBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      // Hash password
+      const passBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(cleanPass));
+      const passHash = Array.from(new Uint8Array(passBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+      
+      // Pre-calculated SHA-256 hashes
+      const admin1 = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'; // 'admin'
+      const admin2 = '4a04a6bc870615d3b92679fe2443a3ef64c33eda89cdaaaa2bcc4e2617f72ba1'; // 'admin@catzone.in'
+      
+      const pass1 = 'ac9689e2272427085e35b9d3e3e8bed88cb3434828b43b86fc0596cad4c6e270'; // 'admin1234'
+      const pass2 = '372962a119f8d8436e432363f77b893e882fedf0a4c51d498faf0730082de4b2'; // 'catzone2026'
+
+      if (
+        (emailHash === admin1 && passHash === pass1) ||
+        (emailHash === admin2 && passHash === pass1) ||
+        (emailHash === admin1 && passHash === pass2) ||
+        (emailHash === admin2 && passHash === pass2)
+      ) {
+        setIsAdminLoggedIn(true);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Auth error", error);
+      return false;
     }
-    return false;
   };
 
   const logoutAdmin = () => {
