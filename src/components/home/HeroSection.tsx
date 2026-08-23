@@ -111,7 +111,7 @@ export const HeroSection: React.FC = () => {
               <div className="text-white max-w-lg">
                 <p className="text-xs uppercase tracking-wider text-purple-300 font-semibold mb-1">Pedigree Showcase</p>
                 <h3 className="text-2xl sm:text-3xl font-display font-bold leading-tight text-white drop-shadow-md">
-                  British Golden Shaded Companion
+                  Meet Your New Best Friend
                 </h3>
               </div>
 
@@ -182,7 +182,7 @@ export const HeroSection: React.FC = () => {
         <div className="mt-14 pt-8 border-t border-stone-200/80 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div className="flex flex-col items-center text-center">
             <span className="font-display text-4xl sm:text-5xl font-extrabold text-[#111111] block tracking-tight">
-              500+
+              1000+
             </span>
             <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
               Happy and loyal buyers who welcomed our kittens
@@ -191,7 +191,7 @@ export const HeroSection: React.FC = () => {
 
           <div className="flex flex-col items-center text-center">
             <span className="font-display text-4xl sm:text-5xl font-extrabold text-[#111111] block tracking-tight">
-              70+
+              200+
             </span>
             <p className="text-xs text-stone-500 mt-1 max-w-[220px] mx-auto text-center">
               Pedigree bloodlines and champions registered

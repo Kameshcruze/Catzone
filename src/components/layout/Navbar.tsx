@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Menu, X, Search, ShoppingBag, User, MessageSquare, ArrowUpRight, Lock } from 'lucide-react';
+import { Menu, X, Search, User, ArrowUpRight, Lock } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { currentPage, navigate, settings, isAdminLoggedIn, enquiries } = useStore();
@@ -94,20 +94,6 @@ export const Navbar: React.FC = () => {
               title="Search catalog"
             >
               <Search className="w-4 h-4" />
-            </button>
-
-            {/* Inquiries / Wishlist Bag Icon */}
-            <button
-              onClick={() => navigate('cats')}
-              className="p-1.5 text-[#111111] hover:text-[#7C3AED] transition relative"
-              title="View Inquiries / Catalog"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              {enquiries.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#6D28D9] text-white text-[9px] font-bold flex items-center justify-center">
-                  {enquiries.length}
-                </span>
-              )}
             </button>
 
             {/* User / Admin Icon */}
