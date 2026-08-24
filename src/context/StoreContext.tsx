@@ -65,9 +65,9 @@ const STORAGE_KEYS = {
 };
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cats, setCats] = useState<Cat[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [cats, setCats] = useState<Cat[]>(DEFAULT_CATS);
+  const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
+  const [enquiries, setEnquiries] = useState<Enquiry[]>(DEFAULT_ENQUIRIES);
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
@@ -101,9 +101,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (enquiriesRes.error) throw new Error(enquiriesRes.error.message);
         if (settingsRes.error) throw new Error(settingsRes.error.message);
 
-        setCats((catsRes.data as unknown as Cat[]) || []);
-        setCategories((categoriesRes.data as unknown as Category[]) || []);
-        setEnquiries((enquiriesRes.data as unknown as Enquiry[]) || []);
+        const fetchedCats = (catsRes.data as unknown as Cat[]) || [];
+        const fetchedCategories = (categoriesRes.data as unknown as Category[]) || [];
+        const fetchedEnquiries = (enquiriesRes.data as unknown as Enquiry[]) || [];
+
+        setCats(fetchedCats.length > 0 ? fetchedCats : DEFAULT_CATS);
+        setCategories(fetchedCategories.length > 0 ? fetchedCategories : DEFAULT_CATEGORIES);
+        setEnquiries(fetchedEnquiries.length > 0 ? fetchedEnquiries : DEFAULT_ENQUIRIES);
         
         if (settingsRes.data) {
           let loadedSettings = settingsRes.data as unknown as SiteSettings;

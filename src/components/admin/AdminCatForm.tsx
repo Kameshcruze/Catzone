@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from './AdminLayout';
-import { Cat } from '../../types';
+import { Cat, Category } from '../../types';
+import { DEFAULT_CATEGORIES } from '../../data/seedData';
 import { normalizeImageUrl, processImageFile, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtils';
 import {
   Save,
@@ -82,6 +83,46 @@ export const AdminCatForm: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
 
+  // Merge categories from store and defaults to ensure all available breeds are always present
+  const availableCategories = useMemo(() => {
+    const map = new Map<string, Category>();
+    
+    // First include DEFAULT_CATEGORIES
+    DEFAULT_CATEGORIES.forEach((cat) => {
+      map.set(cat.slug || cat.id, cat);
+    });
+
+    // Then merge store categories (which can overwrite or add new custom categories)
+    categories.forEach((cat) => {
+      const key = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-');
+      map.set(key, cat);
+    });
+
+    // Also if any cat in cats list has a unique breed not yet in categories, add it
+    cats.forEach((c) => {
+      if (c.breed) {
+        const slug = c.breed.toLowerCase().replace(/\s+/g, '-');
+        if (!map.has(slug) && !Array.from(map.values()).some((item) => item.name.toLowerCase() === c.breed.toLowerCase())) {
+          map.set(slug, {
+            id: c.category_id || `cat-${slug}`,
+            name: c.breed,
+            slug: slug,
+            description: `${c.breed} pedigree breed companion`,
+            image_url: c.main_image || '',
+            is_active: true,
+            display_order: 99,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+        }
+      }
+    });
+
+    return Array.from(map.values()).sort(
+      (a, b) => (a.display_order || 99) - (b.display_order || 99) || a.name.localeCompare(b.name)
+    );
+  }, [categories, cats]);
+
   // Populate if editing
   useEffect(() => {
     if (existingCat) {
@@ -91,10 +132,12 @@ export const AdminCatForm: React.FC = () => {
 
   // When category changes, auto-fill breed name
   const handleCategoryChange = (categoryId: string) => {
-    const selectedCatObj = categories.find((c) => c.id === categoryId);
+    const selectedCatObj = availableCategories.find(
+      (c) => c.id === categoryId || c.slug === categoryId || c.name.toLowerCase() === categoryId.toLowerCase()
+    );
     setFormData((prev) => ({
       ...prev,
-      category_id: categoryId,
+      category_id: selectedCatObj ? selectedCatObj.id : categoryId,
       breed: selectedCatObj ? selectedCatObj.name : prev.breed,
     }));
   };
@@ -294,11 +337,20 @@ export const AdminCatForm: React.FC = () => {
                 Breed Category *
               </label>
               <select
-                value={formData.category_id}
+                value={
+                  availableCategories.find(
+                    (c) =>
+                      c.id === formData.category_id ||
+                      c.slug === formData.category_id ||
+                      c.name.toLowerCase() === (formData.breed || '').toLowerCase()
+                  )?.id ||
+                  formData.category_id ||
+                  availableCategories[0]?.id
+                }
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#FAF8FF] border border-purple-100 rounded-xl text-sm font-semibold text-[#191816] focus:outline-none focus:border-[#8B5CF6]"
+                className="w-full px-4 py-2.5 bg-[#FAF8FF] border border-purple-100 rounded-xl text-sm font-semibold text-[#191816] focus:outline-none focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20 cursor-pointer"
               >
-                {categories.map((c) => (
+                {availableCategories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
                   </option>
