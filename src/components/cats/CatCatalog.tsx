@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { Cat, Category } from '../../types';
 import { CatCard } from './CatCard';
@@ -13,6 +13,8 @@ import {
   RotateCcw,
   Tag,
   ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 export const CatCatalog: React.FC = () => {
@@ -33,6 +35,53 @@ export const CatCatalog: React.FC = () => {
   >('available-first');
 
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Drag to scroll ref & states for desktop swipe
+  const pillContainerRef = useRef<HTMLDivElement>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+  const [hasDragged, setHasDragged] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!pillContainerRef.current) return;
+    setIsMouseDown(true);
+    setHasDragged(false);
+    setStartX(e.pageX - pillContainerRef.current.offsetLeft);
+    setScrollLeftState(pillContainerRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown || !pillContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - pillContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    if (Math.abs(x - startX) > 4) {
+      setHasDragged(true);
+    }
+    pillContainerRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (!pillContainerRef.current) return;
+    if (e.deltaY !== 0) {
+      pillContainerRef.current.scrollLeft += e.deltaY;
+    }
+  };
+
+  const scrollPills = (direction: 'left' | 'right') => {
+    if (!pillContainerRef.current) return;
+    const scrollAmount = direction === 'left' ? -260 : 260;
+    pillContainerRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  };
 
   // Sync category param from navigation
   useEffect(() => {
@@ -206,35 +255,73 @@ export const CatCatalog: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Categories Filter Pills */}
-          <div className="flex items-center space-x-2 overflow-x-auto pt-4 mt-3 border-t border-purple-100/60 pb-1 scrollbar-none">
+          {/* Quick Categories Filter Pills with Desktop Swiping, Drag-to-Scroll & Arrows */}
+          <div className="relative group/pills pt-4 mt-3 border-t border-purple-100/60">
+            {/* Desktop Left Scroll Button */}
             <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
-                selectedCategory === 'all'
-                  ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
-                  : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
+              type="button"
+              onClick={() => scrollPills('left')}
+              aria-label="Scroll left"
+              className="hidden md:flex absolute -left-2 top-1/2 mt-1 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 border border-purple-200 text-stone-700 hover:text-[#8B5CF6] hover:border-[#8B5CF6] items-center justify-center shadow-md transition-all opacity-80 hover:opacity-100 hover:scale-105 active:scale-95"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div
+              ref={pillContainerRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              onWheel={handleWheel}
+              className={`flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none select-none scroll-smooth ${
+                isMouseDown ? 'cursor-grabbing' : 'cursor-grab md:cursor-pointer'
               }`}
             >
-              All Breeds ({cats.length})
+              <button
+                type="button"
+                onClick={() => {
+                  if (!hasDragged) setSelectedCategory('all');
+                }}
+                className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 shrink-0 ${
+                  selectedCategory === 'all'
+                    ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
+                    : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
+                }`}
+              >
+                All Breeds ({cats.length})
+              </button>
+              {categories.map((cat) => {
+                const count = cats.filter((c) => c.category_id === cat.id).length;
+                const isSelected = selectedCategory === cat.id || selectedCategory === cat.slug;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      if (!hasDragged) setSelectedCategory(cat.id);
+                    }}
+                    className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 shrink-0 ${
+                      isSelected
+                        ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
+                        : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
+                    }`}
+                  >
+                    {cat.name} ({count})
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Desktop Right Scroll Button */}
+            <button
+              type="button"
+              onClick={() => scrollPills('right')}
+              aria-label="Scroll right"
+              className="hidden md:flex absolute -right-2 top-1/2 mt-1 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-white/95 border border-purple-200 text-stone-700 hover:text-[#8B5CF6] hover:border-[#8B5CF6] items-center justify-center shadow-md transition-all opacity-80 hover:opacity-100 hover:scale-105 active:scale-95"
+            >
+              <ChevronRight className="w-4 h-4" />
             </button>
-            {categories.map((cat) => {
-              const count = cats.filter((c) => c.category_id === cat.id).length;
-              const isSelected = selectedCategory === cat.id || selectedCategory === cat.slug;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
-                    isSelected
-                      ? 'bg-[#8B5CF6] text-white shadow-md shadow-purple-500/25 ring-2 ring-[#8B5CF6]/30'
-                      : 'bg-white border border-purple-100 text-stone-700 hover:text-[#8B5CF6] hover:border-purple-300'
-                  }`}
-                >
-                  {cat.name} ({count})
-                </button>
-              );
-            })}
           </div>
         </div>
 
@@ -319,15 +406,15 @@ export const CatCatalog: React.FC = () => {
               </div>
               <input
                 type="range"
-                min={30000}
+                min={6000}
                 max={150000}
-                step={5000}
+                step={1000}
                 value={priceRange}
                 onChange={(e) => setPriceRange(Number(e.target.value))}
                 className="w-full accent-[#8B5CF6] cursor-pointer"
               />
               <div className="flex justify-between text-[10px] text-stone-500 mt-1 font-mono">
-                <span>₹30,000</span>
+                <span>₹6,000</span>
                 <span>₹1,50,000</span>
               </div>
             </div>
@@ -501,9 +588,9 @@ export const CatCatalog: React.FC = () => {
               </div>
               <input
                 type="range"
-                min={30000}
+                min={6000}
                 max={150000}
-                step={5000}
+                step={1000}
                 value={priceRange}
                 onChange={(e) => setPriceRange(Number(e.target.value))}
                 className="w-full accent-[#8B5CF6]"

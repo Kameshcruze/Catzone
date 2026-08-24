@@ -44,9 +44,16 @@ export const AdminDashboard: React.FC = () => {
 
   const availablePercentage = totalCats > 0 ? Math.round((availableCats / totalCats) * 100) : 0;
 
+  const greeting = (() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning, Admin.';
+    if (hour < 17) return 'Good afternoon, Admin.';
+    return 'Good evening, Admin.';
+  })();
+
   return (
     <AdminLayout
-      title="Good morning, Admin."
+      title={greeting}
       subtitle="Here is an overview of your cattery inventory, availability statuses, and WhatsApp purchase requests."
       actionButton={
         <button

@@ -15,6 +15,9 @@ import {
   Upload,
   Link as LinkIcon,
   Sparkles,
+  CheckCircle2,
+  List,
+  PlusCircle,
 } from 'lucide-react';
 
 const SAMPLE_CAT_PHOTOS = [
@@ -45,7 +48,7 @@ export const AdminCatForm: React.FC = () => {
     category_id: categories[0]?.id || 'cat-1',
     breed: categories[0]?.name || 'British Shorthair',
     gender: 'Male',
-    age_months: 4,
+    age: '4 Months',
     date_of_birth: new Date(Date.now() - 4 * 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     color: 'Golden Shaded (NY11)',
     price: 75000,
@@ -65,6 +68,17 @@ export const AdminCatForm: React.FC = () => {
   const [galleryUrlInput, setGalleryUrlInput] = useState('');
   const [error, setError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [successPopup, setSuccessPopup] = useState<{
+    title: string;
+    message: string;
+    catName: string;
+    catId: string;
+    breed: string;
+    age: string;
+    price: number;
+    image: string;
+    isNew: boolean;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -125,21 +139,45 @@ export const AdminCatForm: React.FC = () => {
       .filter(Boolean)
       .map((img) => normalizeImageUrl(img));
 
+    const rawAge = (formData.age || '').trim();
+    const formattedAge = (() => {
+      if (!rawAge) return '3 Months';
+      // If user typed only a number e.g. "4", "5.5", "12"
+      if (/^\d+(\.\d+)?$/.test(rawAge)) {
+        const n = parseFloat(rawAge);
+        return n === 1 ? '1 Month' : `${n} Months`;
+      }
+      return rawAge;
+    })();
+
     try {
       if (isEditing && editCatId) {
         await updateCat(editCatId, {
           ...formData,
+          age: formattedAge,
           main_image: cleanedMain,
           gallery_images: cleanedGallery,
         });
+        setSuccessPopup({
+          title: 'Successfully updated cat details!',
+          message: `The profile details for "${formData.name || 'Pedigree Cat'}" have been successfully saved and updated in the system.`,
+          catName: formData.name || 'Pedigree Cat',
+          catId: formData.cat_id || 'CZ-Profile',
+          breed: formData.breed || 'Pedigree Breed',
+          age: formattedAge,
+          price: Number(formData.price) || 50000,
+          image: cleanedMain || DEFAULT_FALLBACK_IMAGE,
+          isNew: false,
+        });
       } else {
+        const generatedId = formData.cat_id || `CZ-${Math.floor(100 + Math.random() * 900)}`;
         await addCat({
           name: formData.name || 'Pedigree Kitten',
-          cat_id: formData.cat_id || `CZ-${Math.floor(100 + Math.random() * 900)}`,
+          cat_id: generatedId,
           category_id: formData.category_id || categories[0]?.id,
           breed: formData.breed || 'British Shorthair',
           gender: (formData.gender as 'Male' | 'Female') || 'Male',
-          age: formData.age || '3 Months',
+          age: formattedAge,
           date_of_birth: formData.date_of_birth || '',
           color: formData.color || 'Solid',
           price: Number(formData.price) || 50000,
@@ -154,8 +192,18 @@ export const AdminCatForm: React.FC = () => {
           is_available: formData.is_available !== undefined ? formData.is_available : true,
           is_featured: !!formData.is_featured,
         });
+        setSuccessPopup({
+          title: 'Successfully saved the new cat details!',
+          message: `The new cat details for "${formData.name || 'Pedigree Kitten'}" (${generatedId}) have been successfully saved to your catalog.`,
+          catName: formData.name || 'Pedigree Kitten',
+          catId: generatedId,
+          breed: formData.breed || 'British Shorthair',
+          age: formattedAge,
+          price: Number(formData.price) || 50000,
+          image: cleanedMain || DEFAULT_FALLBACK_IMAGE,
+          isNew: true,
+        });
       }
-      navigate('admin-cats');
     } catch (err: any) {
       console.error(err);
       setError('Failed to save cat. ' + (err.message || ''));
@@ -276,15 +324,14 @@ export const AdminCatForm: React.FC = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#191816] mb-1">
-                Age (Months) *
+                Age *
               </label>
               <input
-                type="number"
-                min={1}
-                max={120}
+                type="text"
                 required
-                value={formData.age_months || 3}
-                onChange={(e) => setFormData({ ...formData, age_months: Number(e.target.value) })}
+                placeholder="e.g. 4 Months, 8 Months, 1.5 Years"
+                value={formData.age || ''}
+                onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                 className="w-full px-4 py-2.5 bg-[#FAF8FF] border border-purple-100 rounded-xl text-sm focus:outline-none focus:border-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
               />
             </div>
@@ -666,6 +713,112 @@ export const AdminCatForm: React.FC = () => {
         </div>
 
       </form>
+
+      {/* Success Popup Modal */}
+      {successPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-[32px] border border-purple-100 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl shadow-purple-950/20 text-center animate-in zoom-in-95 duration-200">
+            {/* Success Icon */}
+            <div className="mx-auto w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-400/30 flex items-center justify-center relative">
+              <div className="absolute inset-0 rounded-full bg-emerald-400/10 animate-ping" />
+              <CheckCircle2 className="w-9 h-9 text-emerald-600 relative z-10" />
+            </div>
+
+            {/* Title & Message */}
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#191816]">
+                {successPopup.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed px-2">
+                {successPopup.message}
+              </p>
+            </div>
+
+            {/* Cat Summary Card */}
+            <div className="bg-[#FAF8FF] rounded-2xl border border-purple-100/80 p-3.5 flex items-center space-x-3.5 text-left">
+              <img
+                src={successPopup.image}
+                alt={successPopup.catName}
+                referrerPolicy="no-referrer"
+                className="w-14 h-14 rounded-xl object-cover border border-purple-200 shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-serif font-bold text-[#191816] truncate">
+                    {successPopup.catName}
+                  </h4>
+                  <span className="text-[11px] font-mono text-purple-700 font-semibold shrink-0">
+                    {successPopup.catId}
+                  </span>
+                </div>
+                <p className="text-xs text-stone-500 truncate mt-0.5">
+                  {successPopup.breed} · {successPopup.age}
+                </p>
+                <p className="text-xs font-bold text-[#8B5CF6] mt-0.5">
+                  ₹{successPopup.price.toLocaleString('en-IN')}
+                </p>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setSuccessPopup(null);
+                  navigate('admin-cats');
+                }}
+                className="w-full py-3.5 bg-luxury-gradient text-white text-xs uppercase tracking-widest font-semibold rounded-full shadow-md shadow-purple-500/20 hover:shadow-lg transition flex items-center justify-center space-x-2"
+              >
+                <List className="w-4 h-4" />
+                <span>View in Inventory</span>
+              </button>
+
+              {successPopup.isNew ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSuccessPopup(null);
+                    setFormData({
+                      name: '',
+                      cat_id: `CZ-${Math.floor(100 + Math.random() * 900)}`,
+                      category_id: categories[0]?.id || 'cat-1',
+                      breed: categories[0]?.name || 'British Shorthair',
+                      gender: 'Male',
+                      age: '4 Months',
+                      date_of_birth: new Date().toISOString().split('T')[0],
+                      color: '',
+                      price: 60000,
+                      vaccinated: true,
+                      dewormed: true,
+                      health_status: 'Clinically vet-verified, vaccinated & microchipped',
+                      personality: 'Affectionate & Playful',
+                      description: '',
+                      location: 'Bengaluru Sanctuary Nursery',
+                      main_image: '',
+                      gallery_images: [],
+                      is_available: true,
+                      is_featured: false,
+                    });
+                  }}
+                  className="w-full py-3.5 bg-purple-50 hover:bg-purple-100 text-[#191816] text-xs uppercase tracking-widest font-semibold rounded-full transition flex items-center justify-center space-x-2 border border-purple-100"
+                >
+                  <PlusCircle className="w-4 h-4 text-[#8B5CF6]" />
+                  <span>Add Another Cat</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setSuccessPopup(null)}
+                  className="w-full py-3.5 bg-purple-50 hover:bg-purple-100 text-[#191816] text-xs uppercase tracking-widest font-semibold rounded-full transition border border-purple-100"
+                >
+                  Stay on Page
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 };

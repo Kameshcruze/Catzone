@@ -2,10 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../../context/StoreContext';
 import { Menu, X, Search, User, ArrowUpRight, Lock } from 'lucide-react';
 
+const ANNOUNCEMENTS = [
+  'Free delivery across Tamilnadu',
+  'Buy 1 @ 7000 | Buy 2 @ 12000',
+  '2 special gifts with every order',
+];
+
 export const Navbar: React.FC = () => {
   const { currentPage, navigate, settings, isAdminLoggedIn, enquiries } = useStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeAnnouncementIdx, setActiveAnnouncementIdx] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +24,14 @@ export const Navbar: React.FC = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Cycle announcements one by one for mobile
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveAnnouncementIdx((prev) => (prev + 1) % ANNOUNCEMENTS.length);
+    }, 3200);
+    return () => clearInterval(interval);
   }, []);
 
   const navLinks = [
@@ -31,11 +46,33 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Announcement Bar */}
-      {settings.announcement_bar && (
-        <div className="bg-gradient-to-r from-[#180F2E] via-[#111111] to-[#1E1038] text-[#E5E7EB] text-[11px] font-medium tracking-wide py-2 px-4 text-center flex items-center justify-center space-x-2 border-b border-[#8B5CF6]/20">
-          <span>{settings.announcement_bar}</span>
+      {/* Mobile view: Only ONE line at a time, rotating sequentially */}
+      <div className="block sm:hidden bg-gradient-to-r from-[#180F2E] via-[#111111] to-[#1E1038] text-[#E5E7EB] text-[11px] font-medium py-2 px-4 border-b border-[#8B5CF6]/20 shadow-xs text-center overflow-hidden">
+        <div className="h-4 flex items-center justify-center relative">
+          <span
+            key={activeAnnouncementIdx}
+            className="animate-in fade-in duration-500 tracking-wide inline-block font-medium"
+          >
+            {ANNOUNCEMENTS[activeAnnouncementIdx]}
+          </span>
         </div>
-      )}
+      </div>
+
+      {/* Tablet & Desktop view: Scrolled continuously from right to left with original text styling */}
+      <div className="hidden sm:block bg-gradient-to-r from-[#180F2E] via-[#111111] to-[#1E1038] text-[#E5E7EB] text-[11px] font-medium tracking-wide py-2 border-b border-[#8B5CF6]/20 overflow-hidden select-none">
+        <div className="animate-marquee flex items-center space-x-10">
+          {[...Array(4)].map((_, loopIdx) => (
+            <div key={loopIdx} className="flex items-center space-x-10 shrink-0">
+              {ANNOUNCEMENTS.map((item, idx) => (
+                <React.Fragment key={idx}>
+                  <span>{item}</span>
+                  <span className="text-[#8B5CF6]/60 text-xs">·</span>
+                </React.Fragment>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Main Header */}
       <header

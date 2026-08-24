@@ -13,6 +13,7 @@ import {
   X,
   AlertTriangle,
   Upload,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const AdminCategories: React.FC = () => {
@@ -29,6 +30,13 @@ export const AdminCategories: React.FC = () => {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
+  const [successPopup, setSuccessPopup] = useState<{
+    title: string;
+    message: string;
+    breedName: string;
+    image: string;
+    isNew: boolean;
+  } | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -101,6 +109,13 @@ export const AdminCategories: React.FC = () => {
           image_url: cleanedImageUrl,
           is_active: formData.is_active,
         });
+        setSuccessPopup({
+          title: 'Successfully updated breed details!',
+          message: `The breed details for "${formData.name}" have been successfully saved and updated.`,
+          breedName: formData.name,
+          image: cleanedImageUrl || DEFAULT_FALLBACK_IMAGE,
+          isNew: false,
+        });
         setEditingCategory(null);
       } else {
         await addCategory({
@@ -109,6 +124,13 @@ export const AdminCategories: React.FC = () => {
           description: formData.description,
           image_url: cleanedImageUrl,
           is_active: formData.is_active,
+        });
+        setSuccessPopup({
+          title: 'Successfully saved the new breed details!',
+          message: `The new breed category "${formData.name}" has been successfully created and added to the taxonomy.`,
+          breedName: formData.name,
+          image: cleanedImageUrl || DEFAULT_FALLBACK_IMAGE,
+          isNew: true,
         });
         setIsCreating(false);
       }
@@ -412,6 +434,58 @@ export const AdminCategories: React.FC = () => {
                 className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold uppercase tracking-wider shadow-sm"
               >
                 Confirm Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Success Popup Modal */}
+      {successPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-[32px] border border-purple-100 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl shadow-purple-950/20 text-center animate-in zoom-in-95 duration-200">
+            {/* Success Icon */}
+            <div className="mx-auto w-16 h-16 rounded-full bg-emerald-50 border-2 border-emerald-400/30 flex items-center justify-center relative">
+              <div className="absolute inset-0 rounded-full bg-emerald-400/10 animate-ping" />
+              <CheckCircle2 className="w-9 h-9 text-emerald-600 relative z-10" />
+            </div>
+
+            {/* Title & Message */}
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#191816]">
+                {successPopup.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed px-2">
+                {successPopup.message}
+              </p>
+            </div>
+
+            {/* Breed Summary Card */}
+            <div className="bg-[#FAF8FF] rounded-2xl border border-purple-100/80 p-3.5 flex items-center space-x-3.5 text-left">
+              <img
+                src={successPopup.image}
+                alt={successPopup.breedName}
+                referrerPolicy="no-referrer"
+                className="w-14 h-14 rounded-xl object-cover border border-purple-200 shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-serif font-bold text-[#191816] truncate">
+                  {successPopup.breedName}
+                </h4>
+                <p className="text-xs text-stone-500 truncate mt-0.5">
+                  Registered Breed Taxonomy
+                </p>
+              </div>
+            </div>
+
+            {/* Action */}
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setSuccessPopup(null)}
+                className="w-full py-3.5 bg-luxury-gradient text-white text-xs uppercase tracking-widest font-semibold rounded-full shadow-md shadow-purple-500/20 hover:shadow-lg transition flex items-center justify-center space-x-2"
+              >
+                <Check className="w-4 h-4" />
+                <span>Done</span>
               </button>
             </div>
           </div>

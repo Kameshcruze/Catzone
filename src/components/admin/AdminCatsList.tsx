@@ -169,7 +169,7 @@ export const AdminCatsList: React.FC = () => {
                         {/* Gender & Age */}
                         <td className="py-4 px-4 text-stone-600">
                           <span className="font-medium text-[#191816] block">{cat.gender}</span>
-                          <span className="text-[11px]">{cat.age_months} Months</span>
+                          <span className="text-[11px] font-medium text-stone-500">{cat.age || 'Pedigree'}</span>
                         </td>
 
                         {/* Price */}

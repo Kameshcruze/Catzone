@@ -38,10 +38,17 @@ export const AvailableNowSection: React.FC = () => {
         </div>
 
         {/* Centered Filter Pills (Exact Modulive Style: All, Chair, Cabinet, Sofa, Bed -> All, British Shorthair, Persian, etc.) */}
-        <div className="flex items-center justify-center space-x-2 overflow-x-auto pb-4 mb-10 scrollbar-none px-2">
+        <div
+          onWheel={(e) => {
+            if (e.deltaY !== 0) {
+              e.currentTarget.scrollLeft += e.deltaY;
+            }
+          }}
+          className="flex items-center justify-start sm:justify-center space-x-2 overflow-x-auto pb-4 mb-10 scrollbar-none px-2 scroll-smooth"
+        >
           <button
             onClick={() => setFilterBreed('all')}
-            className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-150 ${
+            className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-150 shrink-0 ${
               filterBreed === 'all'
                 ? 'bg-[#111111] text-white shadow-sm'
                 : 'bg-white text-stone-600 border border-stone-300 hover:border-black hover:text-black'
@@ -53,7 +60,7 @@ export const AvailableNowSection: React.FC = () => {
             <button
               key={cat.id}
               onClick={() => setFilterBreed(cat.id)}
-              className={`px-5 py-2 rounded-full text-xs font-medium tracking-wide whitespace-nowrap transition-all duration-150 ${
+              className={`px-5 py-2 rounded-full text-xs font-medium tracking-wide whitespace-nowrap transition-all duration-150 shrink-0 ${
                 filterBreed === cat.id
                   ? 'bg-[#111111] text-white shadow-sm font-semibold'
                   : 'bg-white text-stone-600 border border-stone-300 hover:border-black hover:text-black'

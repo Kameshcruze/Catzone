@@ -31,7 +31,7 @@ Message: {message}
 Please confirm availability and share the purchase / concierge delivery process.`,
   hero_title: 'Find a companion worth coming home to.',
   hero_subtitle: 'Discover carefully selected, pedigree feline companions with verified health lineage, ethical rearing, and bespoke concierge delivery across India.',
-  announcement_bar: 'Certified Pedigree Kittens · Complete Vaccination & DNA Health Guarantee · White-Glove Doorstep Delivery Across India',
+  announcement_bar: 'Free delivery across Tamilnadu · Buy 1 @ 7000 | Buy 2 @ 12000 · 2 special gifts with every order',
   updated_at: new Date().toISOString(),
 };
 

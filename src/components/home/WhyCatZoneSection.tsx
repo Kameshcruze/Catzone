@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useStore } from '../../context/StoreContext';
-import { Play, Plus, X, ArrowUpRight, CheckCircle2, ShieldCheck, Heart } from 'lucide-react';
+import { Plus, X, ArrowUpRight } from 'lucide-react';
 
 export const WhyCatZoneSection: React.FC = () => {
-  const { navigate, openCheckout } = useStore();
+  const { navigate } = useStore();
   const [openAccordion, setOpenAccordion] = useState<number | null>(1); // Item 2 open by default
   const [emailInput, setEmailInput] = useState('');
   const [subscribed, setSubscribed] = useState(false);
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   const accordionItems = [
     {
@@ -52,29 +51,16 @@ export const WhyCatZoneSection: React.FC = () => {
         {/* 1. "Why Choose Us" Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           
-          {/* Left Column: Video Nursery Card */}
-          <div className="lg:col-span-5 space-y-3">
-            <div className="relative rounded-[28px] overflow-hidden bg-stone-100 aspect-4/3 border border-purple-100 shadow-xs group">
+          {/* Left Column: Image Card */}
+          <div className="lg:col-span-5">
+            <div className="relative rounded-[28px] overflow-hidden bg-stone-100 aspect-4/3 border border-purple-100 shadow-xs">
               <img
-                src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=1000&q=80"
+                src="https://lh3.googleusercontent.com/d/18fC61B9WrrWq0EcD-j0ageWopyB7lDfJ"
                 alt="CatZone Nursery Environment"
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover"
               />
-              
-              {/* Central Play Button with Purple Ring */}
-              <button
-                onClick={() => setIsVideoModalOpen(true)}
-                className="absolute inset-0 m-auto w-14 h-14 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-[#6D28D9] text-white flex items-center justify-center shadow-xl transition-all duration-200 hover:scale-110"
-                aria-label="Play Cattery Tour Video"
-              >
-                <Play className="w-5 h-5 ml-1 fill-white" />
-              </button>
             </div>
-
-            <p className="text-xs text-stone-500 font-medium">
-              Watch the video and learn more about CatZone nursery suites.
-            </p>
           </div>
 
           {/* Right Column: Title + Clean Interactive Accordion */}
@@ -120,13 +106,10 @@ export const WhyCatZoneSection: React.FC = () => {
         </div>
 
         {/* 2. Wide Highlight Banner */}
-        <div className="relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-gradient-to-r from-[#170E2C] via-[#100720] to-[#0A0415] border border-purple-900/40 shadow-xl p-8 sm:p-12 lg:p-16 flex flex-col justify-between min-h-[360px] group">
-          <img
-            src="https://images.unsplash.com/photo-1513360309081-38f0762daed9?auto=format&fit=crop&w=1600&q=80"
-            alt="Royal Feline Sanctuary"
-            referrerPolicy="no-referrer"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-30 group-hover:scale-103 transition-transform duration-700"
-          />
+        <div className="relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-gradient-to-r from-[#170E2C] via-[#100720] to-[#0A0415] border border-purple-900/40 shadow-xl p-8 sm:p-12 lg:p-16 flex flex-col justify-between min-h-[360px]">
+          {/* Subtle Ambient Glow Effect */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl pointer-events-none" />
 
           {/* Top Right "Book an Appointment ↗" button */}
           <div className="relative flex justify-end">
@@ -190,50 +173,6 @@ export const WhyCatZoneSection: React.FC = () => {
         </div>
 
       </div>
-
-      {/* Video Modal Preview */}
-      {isVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-[28px] max-w-2xl w-full p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between">
-              <h4 className="font-display font-bold text-lg text-[#111111]">
-                CatZone Nursery & Cattery Experience
-              </h4>
-              <button
-                onClick={() => setIsVideoModalOpen(false)}
-                className="p-1 rounded-full text-stone-500 hover:text-black hover:bg-stone-100"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="aspect-16/9 w-full rounded-2xl overflow-hidden bg-stone-900 relative flex items-center justify-center">
-              <img
-                src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=1200&q=80"
-                alt="Video thumbnail"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover opacity-80"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 text-center">
-                <ShieldCheck className="w-10 h-10 text-purple-400 mb-2" />
-                <h5 className="font-display font-bold text-xl">Cage-Free Luxury Stewardship</h5>
-                <p className="text-xs text-stone-200 mt-1 max-w-sm">
-                  Our certified veterinary cattery features 24/7 HEPA filtration, acoustic enrichment, and individual mothering suites.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-2">
-              <button
-                onClick={() => setIsVideoModalOpen(false)}
-                className="px-5 py-2 bg-[#111111] hover:bg-[#8B5CF6] text-white rounded-full text-xs font-semibold transition"
-              >
-                Close Preview
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 };
