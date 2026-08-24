@@ -35,7 +35,7 @@ export const HeroSection: React.FC = () => {
             Purebred Companion{' '}
             <span className="inline-flex items-center align-middle mx-1 sm:mx-2 p-0.5 rounded-full bg-gradient-to-tr from-purple-400 to-[#8B5CF6] h-8 sm:h-12 w-14 sm:w-22 overflow-hidden shadow-sm">
               <img
-                src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=200&q=80"                
+                src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=200&q=80"
                 alt="Kitten icon"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover rounded-full"
@@ -90,8 +90,8 @@ export const HeroSection: React.FC = () => {
           {/* Main Wide Card (8 cols) */}
           <div className="lg:col-span-8 relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-[#130D24] border border-purple-100 shadow-sm min-h-[380px] sm:min-h-[440px] flex flex-col justify-between group">
             <img
-              src="https://unsplash.com/photo/two-kittens-sitting-on-top-of-a-cat-tree-rW50Steluzk"
-              alt="CatZone Royal British Shorthair"
+              src="https://lh3.googleusercontent.com/d/1dxjSXeDFRF14pnHgxEsqOtaCc8tkmrHh"
+              alt="CatZone Companion"
               referrerPolicy="no-referrer"
               className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-700"
             />
