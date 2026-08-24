@@ -90,7 +90,7 @@ export const HeroSection: React.FC = () => {
           {/* Main Wide Card (8 cols) */}
           <div className="lg:col-span-8 relative rounded-[28px] sm:rounded-[36px] overflow-hidden bg-[#130D24] border border-purple-100 shadow-sm min-h-[380px] sm:min-h-[440px] flex flex-col justify-between group">
             <img
-              src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1400&q=85"
+              src="https://unsplash.com/photo/two-kittens-sitting-on-top-of-a-cat-tree-rW50Steluzk"
               alt="CatZone Royal British Shorthair"
               referrerPolicy="no-referrer"
               className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-700"
