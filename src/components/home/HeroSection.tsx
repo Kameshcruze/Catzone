@@ -35,7 +35,7 @@ export const HeroSection: React.FC = () => {
             Purebred Companion{' '}
             <span className="inline-flex items-center align-middle mx-1 sm:mx-2 p-0.5 rounded-full bg-gradient-to-tr from-purple-400 to-[#8B5CF6] h-8 sm:h-12 w-14 sm:w-22 overflow-hidden shadow-sm">
               <img
-                src="https://drive.google.com/file/d/1dxjSXeDFRF14pnHgxEsqOtaCc8tkmrHh/view?usp=drivesdk"                
+                src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=200&q=80"                
                 alt="Kitten icon"
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover rounded-full"
