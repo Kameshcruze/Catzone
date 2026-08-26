@@ -35,7 +35,7 @@ import { AdminEnquiries } from './components/admin/AdminEnquiries';
 import { AdminSettings } from './components/admin/AdminSettings';
 
 const AppContent: React.FC = () => {
-  const { currentPage, isLoading, error } = useStore();
+  const { currentPage, isLoading, error, isAdminLoggedIn } = useStore();
 
   // Scroll to top on page switch
   useEffect(() => {
@@ -114,28 +114,28 @@ const AppContent: React.FC = () => {
       case 'terms':
         return <TermsPage />;
 
-      // Admin views
+      // Admin views (strictly protected if not authenticated)
       case 'admin-login':
         return <AdminLogin />;
 
       case 'admin-dashboard':
-        return <AdminDashboard />;
+        return isAdminLoggedIn ? <AdminDashboard /> : <AdminLogin />;
 
       case 'admin-cats':
-        return <AdminCatsList />;
+        return isAdminLoggedIn ? <AdminCatsList /> : <AdminLogin />;
 
       case 'admin-cat-new':
       case 'admin-cat-edit':
-        return <AdminCatForm />;
+        return isAdminLoggedIn ? <AdminCatForm /> : <AdminLogin />;
 
       case 'admin-categories':
-        return <AdminCategories />;
+        return isAdminLoggedIn ? <AdminCategories /> : <AdminLogin />;
 
       case 'admin-enquiries':
-        return <AdminEnquiries />;
+        return isAdminLoggedIn ? <AdminEnquiries /> : <AdminLogin />;
 
       case 'admin-settings':
-        return <AdminSettings />;
+        return isAdminLoggedIn ? <AdminSettings /> : <AdminLogin />;
 
       default:
         return (

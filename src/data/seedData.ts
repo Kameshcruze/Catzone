@@ -1222,47 +1222,4 @@ export const DEFAULT_CATS: Cat[] = [
   },
 ];
 
-export const DEFAULT_ENQUIRIES: Enquiry[] = [
-  {
-    id: 'enq-101',
-    cat_id: 'CZ-101',
-    cat_name: 'Luna',
-    cat_breed: 'British Shorthair',
-    cat_price: 65000,
-    customer_name: 'Arjun Mehta',
-    phone: '+91 98200 44556',
-    email: 'arjun.mehta@gmail.com',
-    city: 'Mumbai',
-    message: 'Hello, looking to purchase Luna. Can you arrange air concierge delivery to Mumbai next week?',
-    status: 'New',
-    created_at: '2026-08-16T14:30:00Z',
-  },
-  {
-    id: 'enq-102',
-    cat_id: 'CZ-109',
-    cat_name: 'Thor',
-    cat_breed: 'Maine Coon',
-    cat_price: 110000,
-    customer_name: 'Priyanka Sharma',
-    phone: '+91 97110 88990',
-    email: 'priyanka.s@gmail.com',
-    city: 'New Delhi',
-    message: 'Interested in Thor. We have a spacious villa in South Delhi with one friendly Golden Retriever. Please share video calls.',
-    status: 'Contacted',
-    created_at: '2026-08-15T11:15:00Z',
-  },
-  {
-    id: 'enq-103',
-    cat_id: 'CZ-105',
-    cat_name: 'Casper',
-    cat_breed: 'Persian',
-    cat_price: 48000,
-    customer_name: 'Dr. Ramesh Kulkarni',
-    phone: '+91 94480 12345',
-    email: 'dr.kulkarni@health.org',
-    city: 'Hyderabad',
-    message: 'We would love to visit the Hyderabad Cattery this Saturday to meet Casper in person.',
-    status: 'Completed',
-    created_at: '2026-08-14T09:40:00Z',
-  },
-];
+export const DEFAULT_ENQUIRIES: Enquiry[] = [];

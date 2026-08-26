@@ -67,7 +67,7 @@ const STORAGE_KEYS = {
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cats, setCats] = useState<Cat[]>(DEFAULT_CATS);
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
-  const [enquiries, setEnquiries] = useState<Enquiry[]>(DEFAULT_ENQUIRIES);
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SETTINGS);
 
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
@@ -89,25 +89,22 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     async function fetchData() {
       try {
         setIsLoading(true);
-        const [catsRes, categoriesRes, enquiriesRes, settingsRes] = await Promise.all([
+        // Only fetch public catalog data (cats, categories, public settings) for visitors
+        const [catsRes, categoriesRes, settingsRes] = await Promise.all([
           supabase.from('cats').select('*').order('created_at', { ascending: false }),
           supabase.from('categories').select('*').order('display_order', { ascending: true }),
-          supabase.from('enquiries').select('*').order('created_at', { ascending: false }),
           supabase.from('settings').select('*').eq('id', 'global_settings').maybeSingle()
         ]);
 
         if (catsRes.error) throw new Error(catsRes.error.message);
         if (categoriesRes.error) throw new Error(categoriesRes.error.message);
-        if (enquiriesRes.error) throw new Error(enquiriesRes.error.message);
         if (settingsRes.error) throw new Error(settingsRes.error.message);
 
         const fetchedCats = (catsRes.data as unknown as Cat[]) || [];
         const fetchedCategories = (categoriesRes.data as unknown as Category[]) || [];
-        const fetchedEnquiries = (enquiriesRes.data as unknown as Enquiry[]) || [];
 
         setCats(fetchedCats.length > 0 ? fetchedCats : DEFAULT_CATS);
         setCategories(fetchedCategories.length > 0 ? fetchedCategories : DEFAULT_CATEGORIES);
-        setEnquiries(fetchedEnquiries.length > 0 ? fetchedEnquiries : DEFAULT_ENQUIRIES);
         
         if (settingsRes.data) {
           let loadedSettings = settingsRes.data as unknown as SiteSettings;
@@ -132,6 +129,41 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
     fetchData();
   }, []);
+
+  // Fetch private customer enquiries ONLY when authenticated as Admin
+  useEffect(() => {
+    if (!isAdminLoggedIn) {
+      setEnquiries([]);
+      return;
+    }
+
+    let isMounted = true;
+    const fetchAdminEnquiries = async () => {
+      try {
+        const { data, error: enqError } = await supabase
+          .from('enquiries')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (enqError) {
+          console.error('Error fetching admin enquiries:', enqError);
+          return;
+        }
+
+        if (isMounted && data) {
+          setEnquiries(data as unknown as Enquiry[]);
+        }
+      } catch (err) {
+        console.error('Failed to load enquiries:', err);
+      }
+    };
+
+    fetchAdminEnquiries();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAdminLoggedIn]);
 
   useEffect(() => {
     try {
@@ -367,7 +399,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const { data, error } = await supabase.from('enquiries').insert([{ ...enquiryData }]).select().single();
     if (error) throw new Error(error.message);
     const newEnq = data as unknown as Enquiry;
-    setEnquiries((prev) => [newEnq, ...prev]);
+    if (isAdminLoggedIn) {
+      setEnquiries((prev) => [newEnq, ...prev]);
+    }
     return newEnq;
   };
 
@@ -401,12 +435,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const resetToDefaults = async (): Promise<void> => {
-    // Note: Reset to defaults in a production DB might require truncating tables.
-    // For now we just reset the local state, but usually you wouldn't reset DB defaults globally without care.
-    console.warn("Reset to defaults does not wipe the Supabase database automatically.");
     setCats(DEFAULT_CATS);
     setCategories(DEFAULT_CATEGORIES);
-    setEnquiries(DEFAULT_ENQUIRIES);
+    setEnquiries([]);
     setSettings(DEFAULT_SETTINGS);
   };
 
@@ -451,6 +482,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const logoutAdmin = () => {
     setIsAdminLoggedIn(false);
+    setEnquiries([]);
     navigate('home');
   };
 
