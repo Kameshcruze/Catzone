@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { ArrowUpRight, Star } from 'lucide-react';
+import { ArrowUpRight, Star, Phone } from 'lucide-react';
 import { normalizeImageUrl, DEFAULT_FALLBACK_IMAGE } from '../../utils/imageUtils';
 
 export const HeroSection: React.FC = () => {
@@ -20,7 +20,7 @@ export const HeroSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Headline with Inline Image Pills */}
-        <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-14">
+        <div className="text-center max-w-4xl mx-auto mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] font-display font-bold text-[#111111] tracking-tight leading-[1.12]">
             Find Your Perfect,{' '}
             <span className="inline-flex items-center align-middle mx-1 sm:mx-2 p-0.5 rounded-full bg-gradient-to-tr from-[#8B5CF6] to-indigo-400 h-8 sm:h-12 w-14 sm:w-20 overflow-hidden shadow-sm">
@@ -45,43 +45,58 @@ export const HeroSection: React.FC = () => {
           </h1>
         </div>
 
-        {/* Reviews Pill Floating Above Visuals */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="inline-flex items-center space-x-3 bg-white/80 backdrop-blur-md px-3.5 py-2 rounded-full border border-purple-100 shadow-xs">
-            {/* Overlapping Avatars */}
-            <div className="flex -space-x-2 overflow-hidden shrink-0">
+        {/* Trust & Enquiry Bar - Perfectly proportioned for Mobile & Desktop */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 mb-8 sm:mb-10 w-full px-2">
+          {/* Verified Reviews Capsule */}
+          <div className="inline-flex items-center gap-2.5 sm:gap-3 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-full border border-purple-100/90 shadow-xs hover:border-purple-200 transition-all">
+            <div className="flex -space-x-1.5 overflow-hidden shrink-0">
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
+                className="inline-block h-6 w-6 sm:h-6.5 sm:w-6.5 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
                 alt="Buyer"
               />
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
+                className="inline-block h-6 w-6 sm:h-6.5 sm:w-6.5 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
                 alt="Buyer"
               />
               <img
-                className="inline-block h-7 w-7 rounded-full ring-2 ring-white object-cover"
+                className="inline-block h-6 w-6 sm:h-6.5 sm:w-6.5 rounded-full ring-2 ring-white object-cover"
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80"
                 alt="Buyer"
               />
-              <div className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-[9px] font-bold text-white ring-2 ring-white">
+              <div className="inline-flex h-6 w-6 sm:h-6.5 sm:w-6.5 items-center justify-center rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-[8px] font-bold text-white ring-2 ring-white">
                 +1.2k
               </div>
             </div>
 
-            <div className="text-left">
-              <p className="text-[11px] font-semibold text-[#111111] leading-tight">Check reviews</p>
-              <div className="flex items-center space-x-1.5 text-amber-500 text-[10px]">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <span className="text-stone-500 font-medium whitespace-nowrap">(4.9/5 from 1,200+ buyers)</span>
+            <div className="flex items-center gap-2 text-stone-700 text-xs">
+              <div className="flex text-amber-400 shrink-0">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                ))}
               </div>
+              <span className="font-bold text-[#111111] text-xs">4.9/5</span>
+              <span className="text-stone-300">·</span>
+              <span className="text-stone-600 font-medium text-xs whitespace-nowrap">
+                1,200+ Reviews
+              </span>
             </div>
           </div>
+
+          {/* Direct Enquiry Call Capsule */}
+          <a
+            href="tel:9952826902"
+            className="inline-flex items-center gap-2.5 bg-gradient-to-r from-purple-50/80 via-white to-purple-50/80 hover:bg-white px-4 py-2 rounded-full border border-purple-200/90 hover:border-[#8B5CF6] shadow-xs hover:shadow-sm text-stone-800 hover:text-[#7C3AED] transition-all group shrink-0"
+          >
+            <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-[#7C3AED] group-hover:bg-[#7C3AED] group-hover:text-white transition-all shrink-0">
+              <Phone className="w-3 h-3" />
+            </div>
+            <span className="text-stone-500 font-medium text-xs">For enquiry:</span>
+            <span className="font-bold text-[#111111] group-hover:text-[#7C3AED] tracking-wide font-display text-xs sm:text-sm">
+              9952826902
+            </span>
+          </a>
         </div>
 
         {/* Hero Visual Grid (Main Card Left + 2 Stacked Cards Right) */}

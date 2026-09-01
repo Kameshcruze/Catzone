@@ -3,9 +3,9 @@ import { Category, Cat, SiteSettings, Enquiry } from '../types';
 export const DEFAULT_SETTINGS: SiteSettings = {
   id: 'setting-1',
   business_name: 'CatZone.in',
-  whatsapp_number: '918270898054',
+  whatsapp_number: '919952826902',
   contact_email: 'support@catzone.in',
-  contact_phone: '+91 82708 98054',
+  contact_phone: '+91 99528 26902',
   currency_symbol: '₹',
   address: 'CatZone Sanctuary & Cattery, Karur, India',
   instagram_handle: '@catzone.india',
