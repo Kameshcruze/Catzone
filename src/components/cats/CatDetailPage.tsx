@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Calendar,
   Heart,
+  MapPin,
   ChevronLeft,
   ChevronRight,
   Share2,
@@ -191,12 +192,16 @@ export const CatDetailPage: React.FC = () => {
               <div className="space-y-6">
                 {/* Header */}
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span className="text-xs font-mono uppercase tracking-widest font-bold text-stone-500 bg-purple-50 px-2.5 py-1 rounded-md border border-purple-100">
                       ID: {cat.cat_id}
                     </span>
                     <span className="text-xs uppercase tracking-wider font-semibold text-[#7C3AED]">
                       {cat.breed}
+                    </span>
+                    <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 bg-white rounded-md border border-purple-100 text-xs font-semibold text-stone-700 shadow-2xs">
+                      <MapPin className="w-3.5 h-3.5 text-[#8B5CF6] shrink-0" />
+                      <span>{cat.location}</span>
                     </span>
                   </div>
 

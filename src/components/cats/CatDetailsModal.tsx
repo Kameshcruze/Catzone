@@ -173,18 +173,16 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
             {/* RIGHT: Cat Information (7 cols) */}
             <div className="lg:col-span-6 p-6 sm:p-8 flex flex-col justify-between space-y-6">
               <div className="space-y-5">
-                {/* Eyebrow / Cat ID / Location */}
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-purple-100 pb-3">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs uppercase font-mono tracking-widest text-stone-600 font-semibold bg-purple-50 px-2.5 py-1 rounded-md border border-purple-100">
-                      ID: {cat.cat_id}
-                    </span>
-                    <span className="text-xs font-semibold text-[#8B5CF6] uppercase tracking-wider">
-                      {cat.breed}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-1 text-xs text-stone-600">
-                    <MapPin className="w-3.5 h-3.5 text-[#8B5CF6]" />
+                {/* Eyebrow / Cat ID / Breed / Location */}
+                <div className="flex flex-wrap items-center gap-2 border-b border-purple-100 pb-3 pr-24 sm:pr-28">
+                  <span className="text-xs uppercase font-mono tracking-widest text-stone-600 font-semibold bg-purple-50 px-2.5 py-1 rounded-md border border-purple-100">
+                    ID: {cat.cat_id}
+                  </span>
+                  <span className="text-xs font-semibold text-[#8B5CF6] uppercase tracking-wider">
+                    {cat.breed}
+                  </span>
+                  <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 bg-white rounded-md border border-purple-100 text-xs font-semibold text-stone-700 shadow-2xs">
+                    <MapPin className="w-3.5 h-3.5 text-[#8B5CF6] shrink-0" />
                     <span>{cat.location}</span>
                   </div>
                 </div>
