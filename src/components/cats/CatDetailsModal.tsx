@@ -9,7 +9,6 @@ import {
   MessageCircle,
   ShieldCheck,
   CheckCircle2,
-  Calendar,
   MapPin,
   Heart,
   Tag,
@@ -206,7 +205,7 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
                 </div>
 
                 {/* Key Attributes Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3.5 bg-white rounded-xl border border-purple-100">
+                <div className="grid grid-cols-3 gap-2.5 p-3.5 bg-white rounded-xl border border-purple-100">
                   <div>
                     <span className="text-[10px] uppercase font-semibold text-stone-500 block">
                       Gender
@@ -224,12 +223,6 @@ export const CatDetailsModal: React.FC<CatDetailsModalProps> = ({ cat, isOpen, o
                       Color / Coat
                     </span>
                     <span className="text-xs font-bold text-[#191816] truncate block">{cat.color}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-semibold text-stone-500 block">
-                      Date of Birth
-                    </span>
-                    <span className="text-xs font-bold text-[#191816]">{cat.date_of_birth || 'Verified'}</span>
                   </div>
                 </div>
 
