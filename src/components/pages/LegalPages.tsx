@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStore } from '../../context/StoreContext';
-import { ArrowLeft, ShieldCheck, FileText } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, FileText, AlertTriangle } from 'lucide-react';
 
 export const PrivacyPolicyPage: React.FC = () => {
   const { navigate } = useStore();
@@ -86,6 +86,65 @@ export const TermsPage: React.FC = () => {
           <p>
             Welcome to CatZone.in. By initiating a purchase enquiry or completing an purchase reservation through our WhatsApp concierge, you acknowledge agreement with our terms below.
           </p>
+
+          {/* Official Disclaimer Box */}
+          <div className="bg-amber-50/70 border border-amber-200/80 rounded-2xl p-6 sm:p-7 space-y-4 text-stone-800">
+            <div className="flex items-center space-x-2.5 text-amber-900 pb-2 border-b border-amber-200/60">
+              <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0" />
+              <h2 className="text-sm font-bold uppercase tracking-wider text-amber-900">
+                DISCLAIMER
+              </h2>
+            </div>
+
+            <p className="font-medium text-stone-800 text-sm leading-relaxed">
+              CatZone is an informational platform designed to showcase available cats, provide relevant details about their breeds, age, health and availability, and connect interested individuals with the respective seller.
+            </p>
+
+            <ol className="space-y-3 pt-1 text-xs sm:text-sm text-stone-700 leading-relaxed list-none">
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">1.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">No Direct Online Sales:</strong> CatZone does not provide an online checkout facility or directly process payments for the purchase of cats through this website.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">2.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">Enquiry-Based Interaction:</strong> Visitors may use the contact details or WhatsApp facility provided on the website to enquire about a cat&apos;s availability and obtain further information from the seller.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">3.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">Independent Transactions:</strong> Any discussions, arrangements, agreements or transactions relating to the purchase or transfer of a cat take place directly between the prospective buyer and the respective seller, subject to applicable laws and regulations.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">4.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">Animal Welfare Compliance:</strong> All activities involving the breeding, keeping, offering or transfer of cats must comply with applicable Indian animal welfare laws, including the Prevention of Cruelty to Animals Act, 1960 and the Prevention of Cruelty to Animals (Pet Shop) Rules, 2018.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">5.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">Responsible Ownership:</strong> Prospective owners are encouraged to verify the cat&apos;s health condition, vaccination history, veterinary records and other relevant information before proceeding with any arrangement.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">6.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">No Guarantee of Availability:</strong> The availability, health details and other information displayed on the website are subject to confirmation by the respective seller.
+                </div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="font-bold text-amber-900 shrink-0 min-w-5">7.</span>
+                <div>
+                  <strong className="text-stone-900 font-semibold">No Animal Shipping Without Compliance:</strong> Any transportation or transfer of animals must be arranged responsibly and in accordance with applicable animal welfare and transportation requirements.
+                </div>
+              </li>
+            </ol>
+          </div>
 
           <h3 className="text-base font-display font-bold text-[#191816]">
             1. Pedigree Authenticity & Lineage
